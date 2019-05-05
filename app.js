@@ -23,8 +23,11 @@ app.set('view engine', 'handlebars')
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cookieParser())
-app.use('/static',express.static('static'))
-app.use(express.static(path.join(__dirname, 'public')))
+// app.use('/public',express.static('public'))
+const static = express.static(path.join(__dirname, '/public'))
+app.use("/public",static)
+const vendor = express.static(path.join(__dirname+'/vendor'))
+app.use('/vendor',vendor)
 app.use(session({
   key:'user_sid',
   cookie: { maxAge: 60000 },

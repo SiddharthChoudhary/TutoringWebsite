@@ -27,7 +27,7 @@ const userSchema = Joi.object().keys({
 
  router.route('/login')
  .get(sessionChecker,(req,res)=>{
-    res.sendFile(path.resolve('static/login.html'))
+    res.render('login',{layout:false})
   })
   .post(async (req,res,next)=>{
   let email  = req.body.email
