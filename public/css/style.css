@@ -10,3 +10,7 @@ a {
 .margin-bottom-100{
   margin-bottom: 100px
 }
+
+html{
+  font-size: inherit
+}
