@@ -23,6 +23,7 @@ app.set('view engine', 'handlebars')
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cookieParser())
+app.use('/static',express.static('static'))
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(session({
   key:'user_sid',
@@ -49,7 +50,7 @@ app.use((req, res, next) => {
 })
  
 // 5
-app.use('/dashboard',require('./routes/index'))
+app.use('/',require('./routes/index'))
 app.use('/users',require('./routes/users'))
 
 // 6
@@ -59,6 +60,6 @@ app.use((req, res, next) => {
 });
  
 // 7
-app.listen(5000, () => console.log('Server started listening on port 5000!'))
+app.listen(5000 , () => console.log('Server started listening on port 5000!'))
 
 module.exports = app

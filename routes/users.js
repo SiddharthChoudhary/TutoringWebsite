@@ -7,10 +7,12 @@ const User = require('../modals/user').model
 const hashPassword = require('../modals/user').hashPassword
 const compareHash  = require('../modals/user').compareHash
 var session = require('express-session');
+var path = require('path');
+
 //validation schema
 var sessionChecker = (req, res, next) => {
   if (req.session.user && req.cookies.user_sid) {
-      res.redirect('/dashboard');
+      res.redirect('/');
       return;
   } else {
       next();
@@ -25,7 +27,7 @@ const userSchema = Joi.object().keys({
 
  router.route('/login')
  .get(sessionChecker,(req,res)=>{
-    res.render('login')
+    res.sendFile(path.resolve('static/login.html'))
   })
   .post(async (req,res,next)=>{
   let email  = req.body.email
