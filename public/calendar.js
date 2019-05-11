@@ -203,6 +203,7 @@ function createCalendar(calendar, element, adjuster){
       // }
       var number = DayNumber(i+1);
       // Check Date against Event Dates
+      //TODO new schema
       for(var n = 0; n < calendar.Model.length; n++){
         var evDate = calendar.Model[n].Date;
         var toDate = new Date(calendar.Selected.Year, calendar.Selected.Month, (i+1));
@@ -211,8 +212,13 @@ function createCalendar(calendar, element, adjuster){
           var title = document.createElement('span');
           title.className += "cld-title";
           if(calendar.Model[n].Info){
-          title.innerHTML += '<div>' + calendar.Model[n].Info + "</div>" + '<a>'+calendar.Model[n].Title + '</a>';
-          }else {title.innerHTML += '<a>'+calendar.Model[n].Title + '</a>'}
+            let data=calendar.Model[n].Info;
+
+          title.innerHTML += '<div id='+"eve_title"+'>' + data.title + "</div>" +
+                             '<div>' + "Tutor: "+ data.tutor + "</div>" +
+                             '<div>' + "Location:  "+ data.location + "</div>" +
+                             '<div>' + "Time: "+data.time + "</div>" ;
+          }else {title.innerHTML += '<a>'+'</a>'}
           number.appendChild(title);
         }
       }

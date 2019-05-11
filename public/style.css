@@ -70,3 +70,19 @@ footer {
 position: right;
 
 }
+.hidden{
+  display:none;
+}
+
+.nav-header{
+  width:500px;
+  position:fixed;
+}
+
+/* .card-title{
+ font-size:25px;
+}
+.card-subtitle{
+
+  font-size:15px;
+} */

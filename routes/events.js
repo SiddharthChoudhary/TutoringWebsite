@@ -1,104 +1,153 @@
-const mongoCollections = require("../config/mongoCollections");
-const eventCollection = mongoCollections.events;
-const userCollection = mongoCollections.users; // the user database. Technically should be the "User Profile" database? Where it stores the user info like name, position, etc.
-const {ObjectId} = require('mongodb');
+const events = require('../modals/event').model;
+const users = require('../modals/user').model;
+const express = require('express');
+const router = express.Router()
+const {ObjectId}=require("mongodb");
+const Joi = require('joi')
 
-const checkObjectId = function checkObjectId(id) {
-  if (!(id instanceof ObjectId)){
-    try{
-      if(typeof id === 'undefined') throw 'Specified Id is undefined';
-      id = ObjectId(id);
-    } catch (e) {
-      throw 'Unable to parse ObjectId';
-    }
+
+function parseObjectId(id){ 
+  id=String(id);  
+  //console.log(id)
+  // if (!id) throw "You must provide an id to search for";
+  // if(typeof id !== "string") throw "The id is not a string.";
+  try { 
+      return ObjectId.createFromHexString(id);
+      
+  } catch (e) {
+      throw "ObjectId is invalid.";
   }
-  return id;
-}
+};
 
-const getAll = async function getAll(){
-  const events = await eventCollection();
-  const allEvents = await events.find().toArray();
+const reqSchema = Joi.object().keys({
+  day: Joi.number().required(),
+  month: Joi.number().required(),
+  year: Joi.number().required(),
+  start_time:Joi.number().required(),
+  end_time: Joi.number().required(),
+  title: Joi.string().required(),
+  description: Joi.string().required(),
+  location: Joi.string().required(),
+  tutor: Joi.string().required(),
+  student: Joi.string().required(),
+  attendees:Joi.array().items(Joi.string())
+})
 
-  return allEvents;
-}
 
-const getById = async function getById(id) {
-  const checkedId = checkObjectId(id);
-  const events = await eventCollection();
-  const foundEvent = await events.findOne({ _id: checkedId });
-  if(!foundEvent) throw `Event (${checkedId}) was not found!`;
-  const users = await userCollection();
-  const eventCreator = await users.findOne(
-    { _id: foundEvent.creator },
-    { projection: { _id: 1, firstName: 1, lastName: 1 } }
-  );
-
-  foundEvent.creator = eventCreator;
-  return foundEvent;
-}
-
-// find event(s) related to the user(attendee of event), return an Array of events
-const getByAttendee = async function getByAttendee(uid){
-    const checkedId = checkObjectId(uid);
-    const events = await eventCollection();
-    //const users = await userCollection();
-    const foundEvents = await events.find({ "attendees": {_id: checkedId} }).toArray(); // Reference -> https://docs.mongodb.com/manual/tutorial/query-array-of-documents/
-    return foundEvents;
-}
-// we can use the result of this function to highlight dates on each user's calendar
-
-// helper function for *create*, check if a user exists
-const chkuid = async function chkuid(id){
-    const users = await userCollection();
-    const user = await users.findOne({ _id: id });
-    if (!user) throw `Specified creator (${id}) does not exist!`;
-}
 
 
 // @parem: creator(id), day(num), month(num), year(num), start_time(num), end_time(num), title(string), description(string), location(string), attendees(array of id)
-const create = async function create(creator, day, month, year, start_time, end_time, title, description, location, attendees){
-  const events = await eventCollection();
-  //const checkedId = checkObjectId(creator);
+async function create(day, month, year, start_time, end_time, title, description, location, a_tutor, a_student, attendees){
 
-  //chkuid(checkedId); // check if user exists
-
-  // type check
-  //if(typeof day !== "number" || month !== "number" || year !== "number" || start_time !== "number" || end_time !== "number") throw 'day, month, year, start_time and end_time must be numbers';
-  if(typeof title !== 'string' || typeof description !== 'string' || typeof location !== 'string') throw 'Title, description and location must be strings!';
-  // type check attendees array
-  /*attendees.forEach(function(value){
-    var aId = checkObjectId(value);
-    chkuid(aId);
-  })*/
-  // passed type check
+  const tutorId=parseObjectId(a_tutor);
+  const studentId=parseObjectId(a_student);
   
-  const result = await events.insertOne({ creator, day, month, year, start_time, end_time, title, description, location, attendees});
-  return result.ops[0];
+  attendees=[{ _id: parseObjectId(attendees[0])},
+  {_id: parseObjectId(attendees[1])}];
+
+
+  const result = await new events({day:day, month:month, year:year, start_time:start_time, end_time:end_time, title:title, description:description, location:location, tutor:tutorId, student:studentId, attendees: attendees});
+  result.save();
+  // return result.ops[0];
 }
 
-// does not support *update* yet
+async function getByTutor(id){
+  const parsedId=parseObjectId(id);
+  const result=await events.find({tutor: parsedId});
+  return result;
+}
 
-const remove = async function remove(id){
-  const checkedId = checkObjectId(id);
-  const events = await eventCollection();
-  const deletedEvent = await getById(checkedId);
-  await events.deleteOne({ _id: checkedId });
-  return {
-    deleted: true,
-    data: deletedEvent
+async function getById(id){
+  const parsedId=parseObjectId(id);
+  const result=await events.find({"attendees._id":parsedId});
+  return result;
+}
+
+router.get("/form", (req, res)=>{
+  if (req.session.user && req.cookies.user_sid) {
+  res.render("requestForm", {layout:"dashboardLayout"});
+  return;
+ } else res.redirect('/users/login');
+});
+
+router.get("/:id", (req, res)=>{
+  if (req.session.user && req.cookies.user_sid) {
+   const tutorId=req.params.id;
+   req.session.tutor=tutorId;
+   console.log(req.session.tutor)
+   res.redirect("form");
+   return;
+  //  res.render("requestForm", {layout:"dashboardLayout"});
+  }else {
+    res.redirect('/users/login');
+  return;}
+});
+
+router.get("/request/:id", (req, res)=>{
+  const tutorId=req.params.id;
+
+});
+
+
+router.route('/')
+ .post((req,res)=>{
+    
+    // res.render('partials/login',{layout:"loginLayout"});
+  })
+  .get(async (req,res)=>{
+  if (req.session.user && req.cookies.user_sid) {
+    // req.session.user
+    // users.find({});
+  const events=await getById(req.session.user._id)
+  if (events !== null) {
+  let eventList=[];
+  for (let i=0; i<events.length;i++){
+     const parsedId=parseObjectId(events[i].tutor)
+     const tutor=await users.find({_id: parsedId});
+     console.log(tutor)
+     const tutorName=tutor[0].profile.firstname +" "+tutor[0].profile.lastname;
+     const time=events[i].start_time+"-"+events[i].end_time
+     const info={title: events[i].title, tutor: tutorName, location: events[i].location, 
+  time: time}
+     const event={"Year": events[i].year, "Month": events[i].month, "Day": events[i].day,
+    "Info": info}
+     eventList.push(event);
   }
+  res.render('partials/calendar_demo',{layout:"dashboardLayout", pageHeader:"Calendar", username: req.session.user.username, events: JSON.stringify(eventList)});
+  return;
 }
+  // let info={title: "test 1", tutor: "Sam", location: "NB 105", time: "5 pm" };
+
+  //   let events=[
+  //       {"Year": , "Month":5, "Day":7,  'Info': info},
+  //       {"Year": 2019, "Month":5, "Day":17},
+  //       {"Year": 2019, "Month":5, "Day":2},
+  //     ];
+  else{ res.render('partials/calendar_demo',{layout:"dashboardLayout", pageHeader:"Calendar", username: req.session.user.username, events: JSON.stringify([])});
+    return;}
+  } else {
+    res.redirect('/users/login');
+  }
+  
+});
 
 
-module.exports = {
-  getAll,
-  getById,
-  getByAttendee,
-  create,
-  remove
-};
-// getAll -> gets all the events in db
-// getById -> gets the event with given ID
-// getByAttendee -> gets an ARRAY of events that all contain the given ID of attendee
-// create -> creates an event, with all the info provided
-// remove -> removes an event by its ID
+
+
+
+
+// // does not support *update* yet
+
+// const remove = async function remove(id){
+//   const checkedId = checkObjectId(id);
+//   const events = await eventCollection();
+//   const deletedEvent = await getById(checkedId);
+//   await events.deleteOne({ _id: checkedId });
+//   return {
+//     deleted: true,
+//     data: deletedEvent
+//   }
+// }
+
+
+module.exports = router;

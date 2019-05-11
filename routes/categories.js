@@ -3,6 +3,7 @@ const validCategories = ["study", "social", "health"];
 
 module.exports = (db) => {
     router.get("/:category", (req, res) => {
+        if (req.session.user && req.cookies.user_sid) {
         const category = req.params.category;
 
         if (validCategories.indexOf(category) > -1) {            
@@ -13,7 +14,7 @@ module.exports = (db) => {
                 }
 
                 else {
-                    res.render("category", { layout:"main", topics: docs });
+                    res.render("category", { layout:"dashboardLayout", pageHeader:"Discussion Board", topics: docs,username:req.session.user.username });
                 }
             });
         }
@@ -21,6 +22,8 @@ module.exports = (db) => {
         else {
             res.status(404).render("404Page");
         }
+
+      } else res.redirect('/users/login');
 
     });
 

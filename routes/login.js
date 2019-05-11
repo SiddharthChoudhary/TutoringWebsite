@@ -8,7 +8,7 @@ const profileSchema = Joi.object().keys({
   firstname: Joi.string().required(),
   lastname: Joi.string().required(),
   bio: Joi.string().min(1).max(300).required(),
-  gender:Joi.string().required(),
+  gender:Joi.string().valid("Male", "Female").required(),
   tutor_position: Joi.string(),
   subject: Joi.string().required()
 })
@@ -26,28 +26,29 @@ router.get('/' , function(req, res, next) {
 router.get('/dashboard', async function(req,res,next){
   if(!req.session.user && !req.cookies.user_sid){
     res.redirect('users/login')
+    console.log("dash")
   }else{
-    console.log(req.session.user);
+    //console.log(req.session.user);
     res.render('partials/default',{layout:"dashboardLayout", pageHeader:"Dashboard", username: req.session.user.username})
      
     }
     
 });
 /* GET calendar. */
-router.get('/calendar' , function(req, res, next) {
-  if (req.session.user && req.cookies.user_sid) {
-    let events=[
-        {"Year": 2019, "Month":5, "Day":7, 'Title': 'Doctor appointment at 3:25pm.', 'Info': 'See you at 10 am.'},
-        {"Year": 2019, "Month":5, "Day":17,'Title': 'New Garfield movie comes out!', 'Info': 'See you'},
-        {"Year": 2019, "Month":5, "Day":2, 'Title': '25 year anniversary'},
-      ];
-    res.render('partials/calendar_demo',{layout:"dashboardLayout", pageHeader:"Calendar", username: req.session.user.username, events: JSON.stringify(events)});
+// router.get('/calendar' , function(req, res, next) {
+//   if (req.session.user && req.cookies.user_sid) {
+//     let events=[
+//         {"Year": 2019, "Month":5, "Day":7, 'Title': 'Doctor appointment at 3:25pm.', 'Info': 'See you at 10 am.'},
+//         {"Year": 2019, "Month":5, "Day":17,'Title': 'New Garfield movie comes out!', 'Info': 'See you'},
+//         {"Year": 2019, "Month":5, "Day":2, 'Title': '25 year anniversary'},
+//       ];
+//     res.render('partials/calendar_demo',{layout:"dashboardLayout", pageHeader:"Calendar", username: req.session.user.username, events: JSON.stringify(events)});
   
-  } else {
-    res.redirect('users/login');
-  }
+//   } else {
+//     res.redirect('users/login');
+//   }
   
-});
+// });
 
 /* GET forum */
 // router.get('/forum' , function(req, res, next) {

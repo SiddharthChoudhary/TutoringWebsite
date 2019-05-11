@@ -21,3 +21,12 @@ html{
   display:none;
   
   }
+
+.required-field label::after { 
+    content: "*";
+    color: red;
+}
+
+.nav-header{
+  width:500px;
+}

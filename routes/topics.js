@@ -15,25 +15,34 @@ module.exports = (db) => {
     const commentsDb = require("../database/comments")(db);
 
     router.get("/new", (req, res) => {
-        res.render("newTopic", {layout:"main"});
+        if (req.session.user && req.cookies.user_sid) {
+        res.render("newTopic", {layout:"dashboardLayout", pageHeader:"Discussion Board", username:req.session.user.username });
+        } else res.redirect('/users/login');
     });
 
     router.get("/:id", (req, res) => {
+        if (req.session.user && req.cookies.user_sid) {
         const topicId = req.params.id;
-
         topicsDb.getTopic(topicId)
         .then(commentsDb.getAllComments)
         .then((data) => {
-            res.render("topic", { topic: data.topic, comments: data.comments });
+            //compare id here
+            const topic=data.topic;
+            if(topic.creator=== req.session.user._id)
+            {console.log("true")}
+            res.render("topic", { layout:"dashboardLayout",pageHeader:"Discussion Board", topic: data.topic, comments: data.comments, username:req.session.user.username });
         }).catch((err) => {
             console.log(err);
             res.status(404).render("404Page");
         });
+       } else res.redirect('/users/login');
     });
 
     router.post("/new", (req, res) => {
+    if (req.session.user && req.cookies.user_sid) {
         const newTopic = {
             id: shortid.generate(),
+            creator: req.session.user._id,
             title: req.body.title,
             description: req.body.description,
             postDate: Date.now(),
@@ -51,6 +60,7 @@ module.exports = (db) => {
                 res.status(200).json({ topicId: newTopic.id });
             }
         });
+    }else res.redirect('/users/login');
     });
 
     return router;

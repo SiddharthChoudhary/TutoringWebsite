@@ -21,6 +21,15 @@
   
    
   <link rel="stylesheet" href="../../public/css/theme2.css" type="text/css">
+
+  <link rel="stylesheet" href="../../public/style.css"> 
+   
+   {{!-- <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+          crossorigin="anonymous"> --}}
+
+   <script src="/socket.io/socket.io.js"></script> 
   
 </head>
 
@@ -34,35 +43,39 @@
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
       <!-- Sidebar - Brand -->
+      <li class="nav-item active">
       <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
         <div class="sidebar-brand-icon rotate-n-15">
-          <i class="fas fa-laugh-wink"></i>
+          <em class="fas fa-laugh-wink"></em>
         </div>
         <div class="sidebar-brand-text mx-3">Stud-Tutor</div>
       </a>
-
       <!-- Divider -->
       <hr class="sidebar-divider my-0">
+     </li>
+      
+      
 
       <!-- Nav Item - Dashboard -->
       <li class="nav-item active">
         <a class="nav-link" href="/dashboard">
-          <i class="fas fa-fw fa-tachometer-alt"></i>
+          <em class="fas fa-fw fa-tachometer-alt"></em>
           <span>Dashboard</span></a>
+          <!-- Divider -->
+      <hr class="sidebar-divider">
       </li>
 
-      <!-- Divider -->
-      <hr class="sidebar-divider">
+      
 
       <!-- Heading -->
-      <div class="sidebar-heading">
+      <li class="sidebar-heading">
         Interface
-      </div>
+      </li>
 
       <!-- Nav Item - Calendar -->
       <li class="nav-item">
         <a class="nav-link" href="/calendar">
-        <i class="far fa-fw fa-calendar-alt"></i>
+        <em class="far fa-fw fa-calendar-alt"></em>
           <span>Calendar</span>
         </a>
       </li>
@@ -70,7 +83,7 @@
       <!-- Nav Item - Tutors -->
       <li class="nav-item">
         <a class="nav-link" href="/tutors">
-          <i class="fas fa-fw fa-chalkboard-teacher"></i>
+          <em class="fas fa-fw fa-chalkboard-teacher"></em>
           <span>Tutors</span>
         </a>
       </li>
@@ -78,10 +91,11 @@
       <!-- Nav Item - Forum -->
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-          <i class="fas fa-fw fa-comments"></i>
+          <em class="fas fa-fw fa-comments"></em>
           <span>Forum</span>
         </a>
-        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+
+        <div id="collapseTwo" class="collapse">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Forum topics:</h6>
             <a class="collapse-item" href="/forum">Home</a>
@@ -91,31 +105,32 @@
               <a class="collapse-item" href="/topics/new">New Topic</a>
           </div>
         </div>
-      </li>
-    
-
-      <!-- Divider -->
+        <!-- Divider -->
       <hr class="sidebar-divider">
+      </li>
 
       <!-- Heading -->
-      <div class="sidebar-heading">
+      <li class="sidebar-heading">
         Learn More
-      </div>
+      </li>
+
       <!-- Nav Item - Tables -->
       <li class="nav-item">
         <a class="nav-link" href="/about">
-          <i class="fas fa-fw fa-table"></i>
+          <em class="fas fa-fw fa-table"></em>
           <span>About Us</span></a>
+          <!-- Divider -->
+      <hr class="sidebar-divider d-none d-md-block">
       </li>
 
-      <!-- Divider -->
-      <hr class="sidebar-divider d-none d-md-block">
-
+      
+      <li class="text-center d-none d-md-inline">
       <!-- Sidebar Toggler (Sidebar) -->
-      <div class="text-center d-none d-md-inline">
+      
         <button class="rounded-circle border-0" id="sidebarToggle"></button>
-      </div>
-
+      
+      </li>
+    
     </ul>
     <!-- End of Sidebar -->
 
@@ -130,16 +145,16 @@
 
           <!-- Sidebar Toggle (Topbar) -->
           <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-            <i class="fa fa-bars"></i>
+            <em class="fa fa-bars"></em>
           </button>
 
           <!-- Topbar Search -->
           <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
             <div class="input-group">
-              <input type="text" class="form-control bg-light border-0 small" placeholder="Search for the person" aria-label="Search" aria-describedby="basic-addon2">
+              <input type="text" name="search" class="form-control bg-light border-0 small" placeholder="Search for the person" aria-label="Search">
               <div class="input-group-append">
                 <button class="btn btn-primary" type="button">
-                  <i class="fas fa-search fa-sm"></i>
+                  <em class="fas fa-search fa-sm"></em>
                 </button>
               </div>
             </div>
@@ -151,16 +166,16 @@
             <!-- Nav Item - Search Dropdown (Visible Only XS) -->
             <li class="nav-item dropdown no-arrow d-sm-none">
               <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-search fa-fw"></i>
+                <em class="fas fa-search fa-fw"></em>
               </a>
               <!-- Dropdown - Messages -->
               <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in" aria-labelledby="searchDropdown">
                 <form class="form-inline mr-auto w-100 navbar-search">
                   <div class="input-group">
-                    <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+                    <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search">
                     <div class="input-group-append">
                       <button class="btn btn-primary" type="button">
-                        <i class="fas fa-search fa-sm"></i>
+                        <em class="fas fa-search fa-sm"></em>
                       </button>
                     </div>
                   </div>
@@ -171,10 +186,11 @@
             <!-- Nav Item - Alerts -->
             <li class="nav-item dropdown no-arrow mx-1">
               <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-bell fa-fw"></i>
+                <em class="fas fa-bell fa-fw"></em>
                 <!-- Counter - Alerts -->
-                <span class="badge badge-danger badge-counter">3+</span>
+                <span class="badge badge-danger badge-counter">{{number}}</span>
               </a>
+
               <!-- Dropdown - Alerts -->
               <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
                 <h6 class="dropdown-header">
@@ -183,7 +199,7 @@
                 <a class="dropdown-item d-flex align-items-center" href="#">
                   <div class="mr-3">
                     <div class="icon-circle bg-primary">
-                      <i class="fas fa-file-alt text-white"></i>
+                      <em class="fas fa-file-alt text-white"></em>
                     </div>
                   </div>
                   <div>
@@ -194,7 +210,7 @@
                 <a class="dropdown-item d-flex align-items-center" href="#">
                   <div class="mr-3">
                     <div class="icon-circle bg-success">
-                      <i class="fas fa-donate text-white"></i>
+                      <em class="fas fa-donate text-white"></em>
                     </div>
                   </div>
                   <div>
@@ -205,7 +221,7 @@
                 <a class="dropdown-item d-flex align-items-center" href="#">
                   <div class="mr-3">
                     <div class="icon-circle bg-warning">
-                      <i class="fas fa-exclamation-triangle text-white"></i>
+                      <em class="fas fa-exclamation-triangle text-white"></em>
                     </div>
                   </div>
                   <div>
@@ -220,9 +236,9 @@
             <!-- Nav Item - Messages -->
             <li class="nav-item dropdown no-arrow mx-1">
               <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-envelope fa-fw"></i>
+                <em class="fas fa-envelope fa-fw"></em>
                 <!-- Counter - Messages -->
-                <span class="badge badge-danger badge-counter">7</span>
+                <span id="inbox" class="badge badge-danger badge-counter">7</span>
               </a>
               <!-- Dropdown - Messages -->
               <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="messagesDropdown">
@@ -273,24 +289,24 @@
               </div>
             </li>
 
-            <div class="topbar-divider d-none d-sm-block"></div>
+            <li class="topbar-divider d-none d-sm-block"></li>
 
             <!-- Nav Item - User Information -->
             <li class="nav-item dropdown no-arrow">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{username}} </span>
-                <img class="img-profile rounded-circle" src="https://www.w3schools.com/w3images/lights.jpg">
+                <img class="img-profile rounded-circle" src="https://www.w3schools.com/w3images/lights.jpg" alt="profile image">
               </a>
               <!-- Dropdown - User Information -->
               <!-- redirect to profile page -->
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
                 <a class="dropdown-item" href="/profile_page">
-                  <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                  <em class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></em>
                   Profile
                 </a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                  <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                  <em class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></em>
                   Logout
                 </a>
               </div>
@@ -306,7 +322,7 @@
 
           <!-- Page Heading -->
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">{{pageHeader}}</h1>
+            <h1 class="mb-0 text-gray-800">{{pageHeader}}</h1>
           </div>
 
           <!-- Content Row -->
@@ -326,8 +342,8 @@
               {{{body}}}
                 
                 <!-- Card Body -->
-                
-
+          </div>      
+        
         </div>
         <!-- /.container-fluid -->
 
@@ -352,7 +368,7 @@
 
   <!-- Scroll to Top Button-->
   <a class="scroll-to-top rounded" href="#page-top">
-    <i class="fas fa-angle-up"></i>
+    <em class="fas fa-angle-up"></em>
   </a>
 
   <!-- Logout Modal-->
@@ -382,6 +398,13 @@
 
     <!-- Custom scripts for all pages-->
     <script src="../../public/javascripts/sb-admin-2.min.js"></script>
+    <!-- Custom scripts for ajax inbox-->
+    <script src="../../public/ajax_inbox.js"></script>
+    <!-- Custom scripts for forum-->
+  <script src="/index.js"></script>
+  <script src="/moment.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.10/handlebars.runtime.js"></script>
+  <script src="/handlebarTemplates.js"></script>
     
 </body>
 

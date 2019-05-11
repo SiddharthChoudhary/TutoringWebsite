@@ -4,7 +4,7 @@ window.addEventListener('DOMContentLoaded', function(){
 		let title = document.getElementById('title').value,
 			description = document.getElementById('description').value,
 			category = document.getElementById('category').value;
-			
+			console.log("new topic")
 		if (title == '' || description == '' || category == ''){
 			document.getElementById("errorModal").classList.add(" active");
 			console.log(document.getElementById("errorModal").classList)
@@ -31,7 +31,6 @@ window.addEventListener('DOMContentLoaded', function(){
 				window.location = "/topics/" + res.topicId;
 			}
 		});
-		
 		let postBody = {
 			title: title,
 			description: description,

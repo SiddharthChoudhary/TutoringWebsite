@@ -10,8 +10,10 @@ const router = require("express").Router();
 */
 module.exports = (db) => {
     router.post("/new", (req, res) => {
+        if (req.session.user && req.cookies.user_sid) {
         const newComment = {
             id: shortid.generate(),
+            creator:req.session.user._id,
             content: req.body.content,
             postDate: Date.now(),
             topicId: req.body.topicId
@@ -55,7 +57,9 @@ module.exports = (db) => {
             console.log(err);
             res.status(500).send();
         });
+    } else res.redirect('/users/login');
     });
 
     return router;
+ 
 };
