@@ -95,7 +95,7 @@ router.post('/form/post', (req, res) => {
       return;
     }
 
-    const result = new requests({date: req.body.date, title:req.body.title, description: req.body.description, location: req.body.location, tutor:req.session.tutor, student:req.session.user._id});
+    const result = new requests({date: req.body.date, title:req.body.title, description: req.body.description, location: req.body.location, tutor:req.session.tutor, student:req.session.user._id, state: 0});
     result.save();
     res.redirect('/tutors');
   } else {
