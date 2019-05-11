@@ -5,57 +5,31 @@
     {{#if error_messages }}
     <div class="alert alert-danger">{{error_messages}}</div>
   {{/if}}
-<form action="/profile_form" method="POST">
+<form action="/calendar/form/post" method="POST">
   <div class="form-row">
-    <div class="form-group col-md-6">
-      <label for="title">Title</label>
-      <input type="text" class="form-control" name= "title" id="title" placeholder="Title" value="{{title}}">
+    <div class="form-group col-md-2">
+      <label for="date">Date</label>
+      <input type="date" class="form-control" name= "date" id="date" value="{{date}}">
     </div>
   </div>
   
-    <div class="form-group">
-      <label for="bio">Bio</label>
-      <input type="text" class="form-control" name="bio" id="bio" placeholder="Introduce yourself" value="{{bio}}">
-    </div>
-   
   <div class="form-row">
-    <div class="form-group col-md-3">
-      <label for="gender">Gender</label>
-      <select name="gender" id="gender" class="form-control">
-        <option selected>Choose...</option>
-        <option>Male</option>
-        <option>Female</option>
-      </select>
-    </div>
-    </div>
-  <div class="form-group">
-    <div class="form-check">
-      <input class="form-check-input" type="checkbox" name="tutor_position" id="tutor_position">
-      <label class="form-check-label" for="tutor_position">
-        Are you a tutor?
-      </label>
-      
+    <div class="form-group col-md-4">
+      <label for="title">Title</label>
+      <input type="text" class="form-control" name="title" id="title" placeholder="Title" value="{{title}}">
     </div>
   </div>
-  <div id="form1">
-    <div class="form-row">
-    
-  <div class="form-group col">
-      <label for="subject">Pick your subject of teaching</label>
-    
-      <div class="form-group col-md-3">
-      <select id="subject" name="subject" class="form-control">
-        <option selected>Choose...</option>
-        <option>Maths</option>
-        <option>History</option>
-      </select>
+    <div class="form-group">
+      <label for="description">Description</label>
+      <input type="text" class="form-control" name="description" id="description" placeholder="Describe the event." value="{{description}}">
+    </div>
+  <div class="form-row">
+    <div class="form-group col-md-4">
+      <label for="location">Location</label>
+      <input type="text" class="form-control" name="location" id="location" placeholder="Location" value="{{location}}">
     </div>
   </div>
-  </div>
-  </div>
-  <script>$("#tutor_position").click(function(){
-        $("#form1").toggle();
-    });</script>
+   
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>
 </div>

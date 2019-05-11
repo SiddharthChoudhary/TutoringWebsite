@@ -9,9 +9,7 @@ const attendee=new Schema({_id: ObjectId})
 var eventSchema = new Schema({
     // No need for "Creator" in events
     // creator: ObjectId,
-    day: Number,
-    month: Number,
-    year: Number,
+    date: Date,
     start_time: Number,
     end_time: Number,
     title: String,
