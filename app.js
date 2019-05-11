@@ -57,6 +57,7 @@ hbs.registerHelper("formatDate", (date) => {
 
 // 4 for flash messages
 app.use(flash())
+app.use(helmet())
 app.use((req, res, next) => {
   res.locals.success_mesages = req.flash('success')
   res.locals.error_messages = req.flash('error')
@@ -69,22 +70,12 @@ app.use((req, res, next) => {
   }
   next();
 });
- 
-// 5 Define routes
- 
-// 7
-// app.listen(5000 , () => console.log('Server started listening on port 5000!'))
-
-// module.exports = app
-
 
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/tutoringwebsite', (err, db) => {
     if (err) {
         console.log(err);
         process.exit(1);
     }
-    // console.log(mongoose.connection);
-
     console.log("Connected to database");
     app.use("/forum", require("./routes/index")(db));
     require("./socket/index")(io, db);
@@ -96,11 +87,6 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/tutoringw
     app.use("/topics", require("./routes/topics")(db));
     app.use("/comments", require("./routes/comments")(db));
     app.use("/categories", require("./routes/categories")(db));
-    
-// app.use('*', (req, res) => {
-//   res.redirect('/users/login')});
-// 6
-// catch 404 and forward to error handler
     app.use("*",(req, res, next) => {
       res.render('partials/notFound')
     });
@@ -109,3 +95,4 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/tutoringw
         console.log("Listening on port", port);
     });
 });
+module.exports=app

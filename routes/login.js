@@ -124,9 +124,15 @@ router.route('/profile_form')
   if (req.session.user && req.cookies.user_sid) {
     const ppl= await User.find({"profile.tutor_position": "Taken"})
     //query.exec(function (err, docs) {});
-    console.log(ppl[0]._id)
-    tutors=ppl;
-    res.render('partials/tutors',{layout:"dashboardLayout", pageHeader:"Tutors", username: req.session.user.username, tutors:tutors});
+    if(ppl.length){
+      tutors=ppl;
+      res.render('partials/tutors',{layout:"dashboardLayout", pageHeader:"Tutors", username: req.session.user.username, tutors:tutors});
+      return
+    }else{
+      req.flash("error","No tutors available")
+      res.redirect('/dashboard')
+      return
+    }
   } else {
     res.redirect('users/login');
   }

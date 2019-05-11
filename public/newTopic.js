@@ -1,9 +1,18 @@
 window.addEventListener('DOMContentLoaded', function(){
 	document.getElementById('submit').addEventListener("click",function(){
+				
+		var title = $("#title").val();
+		var description  = $("#description").val()		
+		//ENCODED FOR MAXIMUM SAFETY
+		var encodedTitle = $('<div />').text(title).html();
+		var encodedDescription  = $('<div />').text(description).html();
+
+		$('#title').val(encodedTitle);
+		$('#description').val(encodedDescription);
 		
-		let title = document.getElementById('title').value,
-			description = document.getElementById('description').value,
-			category = document.getElementById('category').value;
+	    title = document.getElementById('title').value
+			description = document.getElementById('description').value
+			let category = document.getElementById('category').value;
 			console.log("new topic")
 		if (title == '' || description == '' || category == ''){
 			document.getElementById("errorModal").classList.add(" active");
