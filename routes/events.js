@@ -1,5 +1,6 @@
 const events = require('../modals/event').model;
 const users = require('../modals/user').model;
+const requests = require('../modals/request').model;
 const express = require('express');
 const router = express.Router()
 const {ObjectId}=require("mongodb");
@@ -20,9 +21,7 @@ function parseObjectId(id){
 };
 
 const reqSchema = Joi.object().keys({
-  day: Joi.number().required(),
-  month: Joi.number().required(),
-  year: Joi.number().required(),
+  date: Joi.date().required(),
   start_time:Joi.number().required(),
   end_time: Joi.number().required(),
   title: Joi.string().required(),
@@ -37,7 +36,7 @@ const reqSchema = Joi.object().keys({
 
 
 // @parem: creator(id), day(num), month(num), year(num), start_time(num), end_time(num), title(string), description(string), location(string), attendees(array of id)
-async function create(day, month, year, start_time, end_time, title, description, location, a_tutor, a_student, attendees){
+async function create(date, start_time, end_time, title, description, location, a_tutor, a_student, attendees){
 
   const tutorId=parseObjectId(a_tutor);
   const studentId=parseObjectId(a_student);
@@ -46,7 +45,7 @@ async function create(day, month, year, start_time, end_time, title, description
   {_id: parseObjectId(attendees[1])}];
 
 
-  const result = await new events({day:day, month:month, year:year, start_time:start_time, end_time:end_time, title:title, description:description, location:location, tutor:tutorId, student:studentId, attendees: attendees});
+  const result = await new events({date:date, start_time:start_time, end_time:end_time, title:title, description:description, location:location, tutor:tutorId, student:studentId, attendees: attendees});
   result.save();
   // return result.ops[0];
 }
@@ -68,6 +67,40 @@ router.get("/form", (req, res)=>{
   res.render("requestForm", {layout:"dashboardLayout"});
   return;
  } else res.redirect('/users/login');
+});
+
+
+router.post('/form/post', (req, res) => {
+  if(req.session.user && req.cookies.user_sid) {
+    // const studId = req.session.user._id;
+    // const tutorId = req.session.tutor;
+    if(req.body.date == ''){
+      req.flash('error', "Please choose a date");
+      res.redirect('/calendar/form');
+      return;
+    }
+    if(!req.body.title){
+      req.flash('error', "Please enter a title");
+      res.redirect('/calendar/form');
+      return;
+    }
+    if(req.body.description == ''){
+      req.flash('error', "Please describe the event");
+      res.redirect('/calendar/form');
+      return;
+    }
+    if(req.body.location == ''){
+      req.flash('error', "Please enter a location");
+      res.redirect('/calendar/form');
+      return;
+    }
+
+    const result = new requests({date: req.body.date, title:req.body.title, description: req.body.description, location: req.body.location, tutor:req.session.tutor, student:req.session.user._id});
+    result.save();
+    res.redirect('/tutors');
+  } else {
+    res.redirect('/users/login')
+  }
 });
 
 router.get("/:id", (req, res)=>{

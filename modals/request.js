@@ -4,9 +4,7 @@ const Schema = mongoose.Schema
 var ObjectId = Schema.Types.ObjectId;
 // 2
 const reqSchema = new Schema({
-  day: Number,
-  month: Number,
-  year: Number,
+  date: Date,
   start_time: Number,
   end_time: Number,
   title: String,

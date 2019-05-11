@@ -1,6 +1,11 @@
 <div class="col-lg-8 mb-4">
-  
-<form action="/profile_form" method="POST">
+  {{#if success_messages }}
+      <div class="alert alert-success">{{success_messages}}</div>
+    {{/if}}
+    {{#if error_messages }}
+    <div class="alert alert-danger">{{error_messages}}</div>
+  {{/if}}
+<form action="/calendar/form/post" method="POST">
   <div class="form-row">
     <div class="form-group col-md-2">
       <label for="date">Date</label>
