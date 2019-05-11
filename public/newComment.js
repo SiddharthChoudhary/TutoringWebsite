@@ -49,9 +49,11 @@ window.addEventListener('DOMContentLoaded', function(){
 			}
 		});
 		
+		// this send data to handlebar templete 
+		// topicId helps to update views
 		var postBody = {
 			topicId: id,
-			content: comment,
+			content: comment
 		};
 		
 		postRequest.send(JSON.stringify(postBody));
