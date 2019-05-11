@@ -1,0 +1,72 @@
+body {
+  background-color: cornflowerblue;
+}
+
+header {
+   background-color: dimgray;
+   margin-bottom: 10px;
+}
+
+a {
+  color: #454545;
+  font-weight: normal;
+}
+
+a:link,
+a:visited,
+a:hover,
+a:active {
+  text-decoration: none;
+}
+
+.site-title {
+   color: #fff;
+}
+
+.site-title a {
+  color: white;
+}
+
+.headerbar {
+   background-color: azure;
+   border-radius: .2rem;
+}
+
+.wrapper {
+  min-height: calc(100vh - 50px);
+}
+
+footer {
+  border-top: 1px solid gray;
+  background-color: lightgray;
+  padding: 10px;
+  height: 50px;
+}
+
+.topic-question {
+  margin-bottom: 10px;
+}
+
+.new-comment {
+  margin-bottom: 20px;
+}
+
+.topic-comment {
+  margin-bottom: 5px;
+}
+
+.new-topic {
+  background-color: white;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-radius: .2rem;
+}
+
+.category-link {
+  color: gray;
+}
+
+#delete{
+position: right;
+
+}

@@ -6,7 +6,15 @@ const bcrypt = require('bcryptjs')
 const userSchema = new Schema({
   email: String,
   username: String,
-  hashedPassword: String
+  hashedPassword: String,
+  profile: {
+    firstname: String,
+    lastname:String,
+    bio: String,
+    gender: String,
+    tutor_position: String,
+    subject: String
+  }
 }, {
  
   // 3
@@ -14,13 +22,11 @@ const userSchema = new Schema({
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   }
-},{
-      collection:'userInfo' 
-  }
+}
 )
  
 // 4
-const User = mongoose.model('user', userSchema)
+// const User = mongoose.model('user', userSchema)
 module.exports.model = mongoose.model('User',userSchema)
 module.exports.hashPassword = async (password) => {
     try {

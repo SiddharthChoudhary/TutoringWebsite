@@ -1,30 +1,26 @@
-var express = require('express');
-var router = express.Router();
-var session = require('express-session');
-//validation schema
-var sessionChecker = (req, res, next) => {
-  if (req.session.user && req.cookies.user_sid) {
-      res.redirect('/');
-      return;
-  } else {
-      next();
-  }    
-};
-/* GET home page. */
-router.get('/' , function(req, res, next) {
-  if (req.session.user && req.cookies.user_sid) {
-    res.render('index',{layout:false});
-  } else {
-    res.redirect('users/login');
-  }
-  
-});
+const bodyParser = require("body-parser");
+const path = require("path");
+const express = require("express");
+const router = express.Router();
 
-router.get('/dashboard',function(req,res,next){
-  if(!req.session.user && !req.cookies.user_sid){
-    res.redirect('users/login')
-  }else{
-    res.render('index',{layout:false})
-  }
-})
-module.exports = router;
+module.exports = (db) => {
+    // router.use(bodyParser.json());
+    // router.use(bodyParser.urlencoded({ extended: false }));
+
+    router.get("/", (req, res) => {
+        if (req.session.user && req.cookies.user_sid) {
+        db.collection('topics').find({}).sort({ _id: -1 }).limit(10).toArray((err, docs) => {
+            if (err) {
+                console.log(err);
+                res.status(500).send();
+            }
+
+            else {
+                res.render("home", { layout:"dashboardLayout", pageHeader:"Discussion Board", topics: docs ,username:req.session.user.username});
+            }
+        });
+     } else res.redirect('/users/login');
+    });
+
+    return router;
+};

@@ -1,0 +1,66 @@
+
+<div class="col-lg-8 mb-4">
+  {{#if success_messages }}
+      <div class="alert alert-success">{{success_messages}}</div>
+    {{/if}}
+    {{#if error_messages }}
+    <div class="alert alert-danger">{{error_messages}}</div>
+  {{/if}}
+<form action="/profile_form" method="POST">
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="firstname">First Name</label>
+      <input type="text" class="form-control" name= "firstname" id="firstname" placeholder="First Name" value="{{firstname}}">
+    </div>
+    <div class="form-group col-md-6">
+      <label for="lastname">Last Name</label>
+      <input type="text" class="form-control" name="lastname" id="lastname" placeholder="Last Name" value="{{lastname}}">
+    </div>
+  </div>
+  
+    <div class="form-group">
+      <label for="bio">Bio</label>
+      <input type="text" class="form-control" name="bio" id="bio" placeholder="Introduce yourself" value="{{bio}}">
+    </div>
+   
+  <div class="form-row">
+    <div class="form-group col-md-3">
+      <label for="gender">Gender</label>
+      <select name="gender" id="gender" class="form-control">
+        <option selected>Choose...</option>
+        <option>Male</option>
+        <option>Female</option>
+      </select>
+    </div>
+    </div>
+  <div class="form-group">
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" name="tutor_position" id="tutor_position">
+      <label class="form-check-label" for="tutor_position">
+        Are you a tutor?
+      </label>
+      
+    </div>
+  </div>
+  <div id="form1">
+    <div class="form-row">
+    
+  <div class="form-group col">
+      <label for="subject">Pick your subject of teaching</label>
+    
+      <div class="form-group col-md-3">
+      <select id="subject" name="subject" class="form-control">
+        <option selected>Choose...</option>
+        <option>Maths</option>
+        <option>History</option>
+      </select>
+    </div>
+  </div>
+  </div>
+  </div>
+  <script>$("#tutor_position").click(function(){
+        $("#form1").toggle();
+    });</script>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+</div>

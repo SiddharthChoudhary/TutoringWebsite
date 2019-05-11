@@ -27,18 +27,13 @@ const userSchema = Joi.object().keys({
 
  router.route('/login')
  .get(sessionChecker,(req,res)=>{
-    res.render('login',{layout:false})
+    res.render('partials/login/login',{layout:'loginLayout'})
   })
   .post(async (req,res,next)=>{
   let email  = req.body.email
   let password = req.body.password
   if(email && password){
-    await User.findOne({'email':req.body.email},async (err,result)=>{
-      if(err){
-        req.flash("There is no such email available with us")
-        res.redirect('/users/login')
-        return
-      }
+    if(!await User.findOne({'email':req.body.email},async (err,result)=>{
       if(result){
         if(await compareHash(password,result.hashedPassword)){
           req.session.user = result;
@@ -51,18 +46,22 @@ const userSchema = Joi.object().keys({
         }
       }
 
-    })
+    })){
+        req.flash('error',"There is no such email available with us")
+        res.redirect('/users/login')
+        return
+    }
   }
  })
 router.route('/register')
   .get(sessionChecker,(req, res) => {
-    res.render('register')
+    res.render('partials/login/register',{layout:'loginLayout'})
   })
   .post(async (req, res, next) => {
     try {
       const result = Joi.validate(req.body, userSchema)
       if (result.error) {
-        req.flash('error', 'Data entered is not valid. Please try again.')
+        req.flash('error', 'Data entered is not valid. Please try again. Password should not contain @#$ etc, and should be of length greater than 6 and less than 30')
         res.redirect('/users/register')
         return
       }

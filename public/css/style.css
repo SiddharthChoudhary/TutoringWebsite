@@ -1,10 +1,10 @@
 body {
   padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  font: 14px;
 }
 
 a {
-  color: #00B7FF;
+  color: rgb(0, 2, 8);
 }
 
 .margin-bottom-100{
@@ -14,3 +14,10 @@ a {
 html{
   font-size: inherit
 }
+
+
+#form1 {
+
+  display:none;
+  
+  }

@@ -1,0 +1,17 @@
+<div class="card topic-question">
+  <div class="card-header">
+    <h4 class="card-title"><a href="/topics/{{id}}">{{title}}</a>
+    </h4>
+    <h6 class="card-subtitle">
+      Posted at {{formatDate postDate}} in 
+      <a href="/categories/{{category}}" class="category-link">{{category}}</a>
+      with {{comments.length}} comments 
+      
+    </h6>
+  </div>
+  <div class="card-body">
+    {{description}} 
+    <a id="delete" href="#">Delete</a>
+  </div>
+  
+</div>
