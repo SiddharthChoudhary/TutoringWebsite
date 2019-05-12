@@ -5,12 +5,18 @@ var numer=0
 function myPeriodicMethod() {
   
     $.ajax({
-      url: "/dashboard", 
+      url: "/checkInbox", 
       success: function(data) {
-        // ...
-        numer+=1;
-        label.html(numer);
-        console.log("hhhh");
+        let requestArray = data.data
+        let count = 0
+        if(requestArray){
+           count = requestArray.length;
+        }
+        if(!count){
+          label.html(count)
+        }else{
+          label.hide()
+        }
       },
       complete: function() {
         // schedule the next request *only* when the current one is complete:
