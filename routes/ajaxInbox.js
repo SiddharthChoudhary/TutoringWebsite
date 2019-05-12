@@ -13,10 +13,10 @@ var path = require('path');
 router.route('/')
 .get(async (req,res)=>{
     if(req.session.user){
-        let user = await User.findOne({'username':req.session.user.username,'state':0})
+        let user = await User.findOne({'username':req.session.user.username})
         if(user){
             let userId = user._id
-            let requestsArray = await Requests.find({'tutor':userId})
+            let requestsArray = await Requests.find({'tutor':userId,'state':0})
             res.send({data:requestsArray})
         }else{
             res.send({data:[]})
