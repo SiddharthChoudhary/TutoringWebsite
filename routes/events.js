@@ -96,6 +96,7 @@ router.post('/form/post', (req, res, next) => {
         else {
           let date=String(result.value.date).split(" ")
           let newEvent={
+          title: result.value.title,
           month: getMonth(date[1]),
           day: date[2],
           year: date[3],
