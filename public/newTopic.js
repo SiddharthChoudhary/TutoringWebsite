@@ -15,9 +15,10 @@ window.addEventListener('DOMContentLoaded', function(){
 			let category = document.getElementById('category').value;
 			console.log("new topic")
 		if (title == '' || description == '' || category == ''){
-			document.getElementById("errorModal").classList.add(" active");
-			console.log(document.getElementById("errorModal").classList)
+			$('.new-topic .alert').removeClass('hidden');
 			return;
+		} else {
+			$('.new-topic .alert').addClass('hidden');
 		}
 		
 		document.getElementById('title').value = '';
