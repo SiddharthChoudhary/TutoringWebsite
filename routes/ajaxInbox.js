@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router()
 const User = require('../modals/user').model
 const Requests = require('../modals/request').model
-
+const Events   = require('../modals/event').model
 
 router.route('/')
 .get(async (req,res)=>{
@@ -26,6 +26,25 @@ router.route('/acceptRequest')
         let updated = await Requests.updateOne({'_id':requestId},{'state':1})
         if(updated){
             res.send({data:1})
+        let request = await Requests.findById({'_id':requestId})
+        let event = {
+            month: request.month,
+            day: request.day,
+            year:request.year,
+            start_time:request.start_time,
+            end_time:request.end_time,
+            title:request.title,
+            description:request.description,
+            location:request.location,
+            tutor:request.tutor,
+            student:request.student,
+            attendees:[request.student,request.tutor]
+        }
+
+        let eventModel = new Events(event)
+        eventModel.save(function(err,event){
+            if(err) return console.error(err)
+        })
         }else{
             res.send({data:0})
         }
