@@ -1,6 +1,4 @@
-
-
-  {{!-- <div class="col-xl-8 col-lg-7 square"> --}}
+{{!-- <div class="col-xl-8 col-lg-7 square"> --}}
     <div class="calendar">
       {{!-- {{session}}  --}}
         <div class="card shadow cld-main">
@@ -26,8 +24,9 @@
 
         </div>
       </div>
-      <script  src="../public/calendar.js"></script>
+    <script src="/public/calendar.js"></script>
      <script>
+      
       let data={{{events}}}
       console.log(data)
       let events=[]
@@ -40,7 +39,9 @@
         temp.Date=new Date(y, m, d);
         temp.Info=data[i].Info;
         events.push(temp);
-      }
+       }
+      
+
       console.log(events)
       calendar(events);
 </script>

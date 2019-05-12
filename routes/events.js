@@ -20,6 +20,32 @@ function parseObjectId(id){
   }
 };
 
+async function parseEvent(id){
+  const events=await getById(id)
+  console.log("event length "+events.length)
+  // if(events.length===0) return false;
+  //console.log(events)
+  if (events.length!== 0) {
+  let eventList=[];
+  for (let i=0; i<events.length;i++){
+     const parsedId=parseObjectId(events[i].tutor)
+     const tutor=await users.find({_id: parsedId});
+     console.log(tutor)
+     const tutorName=tutor[0].profile.firstname +" "+tutor[0].profile.lastname;
+     const time=events[i].start_time+"-"+events[i].end_time
+     const info={title: events[i].title, tutor: tutorName, location: events[i].location, 
+  time: time}
+     const event={"Year": events[i].year, "Month": events[i].month, "Day": events[i].day,
+    "Info": info}
+     eventList.push(event);
+  }
+   return eventList;
+ } else {
+   console.log("false")
+   return false;
+  };
+};
+
 const reqSchema = Joi.object().keys({
   date: Joi.date().required(),
   start_time:Joi.string().regex(/^([0-9]{2})\:([0-9]{2})$/).required(),
@@ -28,9 +54,6 @@ const reqSchema = Joi.object().keys({
   description: Joi.string().required(),
   location: Joi.string().required()
 })
-
-
-
 
 // @parem: creator(id), day(num), month(num), year(num), start_time(num), end_time(num), title(string), description(string), location(string), attendees(array of id)
 async function create(date, start_time, end_time, title, description, location, a_tutor, a_student, attendees){
@@ -64,14 +87,8 @@ function getMonth(monthStr){
   return new Date(monthStr+'-1-01').getMonth()+1
 }
 
-
 router.post('/form/post', (req, res, next) => {
   if(req.session.user) {
-    // const studId = req.session.user._id;
-    // const tutorId = req.session.tutor;
-    //console.log()
-
-    // const request=req.body;
     try {
       const result = Joi.validate(req.body, reqSchema)
       if (result.error) {
@@ -80,7 +97,6 @@ router.post('/form/post', (req, res, next) => {
         return;
          }
         else {
-          //let date=String(result.value.date).split("-") 
           let date=String(result.value.date).split(" ")
           let newEvent={
           month: getMonth(date[1]),
@@ -90,7 +106,7 @@ router.post('/form/post', (req, res, next) => {
           end_time: String(result.value.end_time),
           description: result.value.description,
           location: result.value.location,
-  // attendees: [ObjectId], gonna use 2 data fields to specify who's the tutor and who's the student
+          // attendees: [ObjectId], gonna use 2 data fields to specify who's the tutor and who's the student
           tutor: req.session.tutor, 
           student: req.session.user._id,
           state: 0
@@ -99,74 +115,44 @@ router.post('/form/post', (req, res, next) => {
           request.save();
           res.redirect('/tutors');
           return;
-          //console.log(String(result.value.start_time))
         }
-
        } catch(error) {
          next(error)
       }
-    
-    // if(!req.body.date){
-    //   req.flash('error', "Please choose a date");
-    //   res.redirect('/calendar/form');
-    //   return;
-    // }
-    // if(!req.body.title){
-    //   req.flash('error', "Please enter a title");
-    //   res.redirect('/calendar/form');
-    //   return;
-    // }
-    // if(!req.body.start_time){
-    //   req.flash('error', "Please enter a title");
-    //   res.redirect('/calendar/form');
-    //   return;
-    // }
-    // if(!req.body.end_time){
-    //   req.flash('error', "Please enter a title");
-    //   res.redirect('/calendar/form');
-    //   return;
-    // }
-    // if(req.body.description == ''){
-    //   req.flash('error', "Please describe the event");
-    //   res.redirect('/calendar/form');
-    //   return;
-    // }
-    // if(req.body.location == ''){
-    //   req.flash('error', "Please enter a location");
-    //   res.redirect('/calendar/form');
-    //   return;
-    // }
-
-    // const result = new requests({date: req.body.date, title:req.body.title, start_time:String(req.body.start_time), end_time:String(req.body.end_time), description: req.body.description, location: req.body.location, tutor:req.session.tutor, student:req.session.user._id, state: 0});
-    // result.save();
-    // res.redirect('/tutors');
   } else {
     res.redirect('/users/login')
   }
 });
-
-router.get("/event/:id", (req, res)=>{
+//route for making request
+router.get("/request/:id", (req, res)=>{
   if (req.session.user) {
     req.session.tutor=req.params.id;
-    res.render("requestForm", {layout:"dashboardLayout"});
+    res.render("requestForm", {layout:"dashboardLayout", pageHeader:"Request Form"});
     return;
    } else {
-   res.redirect('/users/login');
-   return;
+     res.redirect('/users/login');
+     return;
    }
-  //  res.render("requestForm", {layout:"dashboardLayout"});
 });
 
-router.get("/request/:id", (req, res)=>{
+//route for viewing tutor events
+router.get("/event/:id", async (req, res)=>{
+  if (req.session.user) {
    req.session.tutor=req.params.id;
-
+   let eventList=await parseEvent(req.params.id);
+   console.log(eventList)
+   if(eventList){
+   res.render('partials/calendar_demo', {layout:"dashboardLayout", pageHeader:"Calendar", username: req.session.user.username, events: JSON.stringify(eventList)});
+   return;
+  } else { 
+    console.log("no event");
+    res.render('partials/calendar_demo',{layout:"dashboardLayout", pageHeader:"Calendar", username: req.session.user.username,events:false});
+    return;
+    }
+  }else {
+    res.redirect('/users/login');
+  }
 });
-
-router.get("/event/:id", (req, res)=>{
-
-
-});
-
 
 router.route('/')
  .post((req,res)=>{
@@ -177,35 +163,15 @@ router.route('/')
   if (req.session.user) {
     // req.session.user
     // users.find({});
-  const events=await getById(req.session.user._id)
-  console.log(events)
-  if (events !== null) {
-  let eventList=[];
-  for (let i=0; i<events.length;i++){
-     const parsedId=parseObjectId(events[i].tutor)
-     const tutor=await users.find({_id: parsedId});
-     console.log(tutor)
-     const tutorName=tutor[0].profile.firstname +" "+tutor[0].profile.lastname;
-     const time=events[i].start_time+"-"+events[i].end_time
-     const info={title: events[i].title, tutor: tutorName, location: events[i].location, 
-  time: time}
-     const event={"Year": events[i].year, "Month": events[i].month, "Day": events[i].day,
-    "Info": info}
-     eventList.push(event);
+   let eventList=await parseEvent(req.session.user._id);
+   if(eventList){
+   res.render('partials/calendar_demo',{ layout:"dashboardLayout", pageHeader:"Calendar", username: req.session.user.username, events: JSON.stringify(eventList)});
+   return;
   }
-  res.render('partials/calendar_demo',{layout:"dashboardLayout", pageHeader:"Calendar", username: req.session.user.username, events: JSON.stringify(eventList)});
-  return;
-}
-  // let info={title: "test 1", tutor: "Sam", location: "NB 105", time: "5 pm" };
-
-  //   let events=[
-  //       {"Year": , "Month":5, "Day":7,  'Info': info},
-  //       {"Year": 2019, "Month":5, "Day":17},
-  //       {"Year": 2019, "Month":5, "Day":2},
-  //     ];
-  else{ 
-    res.render('partials/calendar_demo',{layout:"dashboardLayout", pageHeader:"Calendar", username: req.session.user.username, events: JSON.stringify([])});
-    return;}
+  else { 
+    res.render('partials/calendar_demo',{ layout:"dashboardLayout", pageHeader:"Calendar", username: req.session.user.username, events: JSON.stringify([])});
+    return;
+   }
   } else {
     res.redirect('/users/login');
   }
