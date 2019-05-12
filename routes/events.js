@@ -9,9 +9,6 @@ const Joi = require('joi')
 
 function parseObjectId(id){ 
   id=String(id);  
-  //console.log(id)
-  // if (!id) throw "You must provide an id to search for";
-  // if(typeof id !== "string") throw "The id is not a string.";
   try { 
       return ObjectId.createFromHexString(id);
       
@@ -123,43 +120,9 @@ router.post('/form/post', (req, res, next) => {
     res.redirect('/users/login')
   }
 });
-//route for making request
-router.get("/request/:id", (req, res)=>{
-  if (req.session.user) {
-    req.session.tutor=req.params.id;
-    res.render("requestForm", {layout:"dashboardLayout", pageHeader:"Request Form"});
-    return;
-   } else {
-     res.redirect('/users/login');
-     return;
-   }
-});
 
-//route for viewing tutor events
-router.get("/event/:id", async (req, res)=>{
-  if (req.session.user) {
-   req.session.tutor=req.params.id;
-   let eventList=await parseEvent(req.params.id);
-   console.log(eventList)
-   if(eventList){
-   res.render('partials/calendar_demo', {layout:"dashboardLayout", pageHeader:"Calendar", username: req.session.user.username, events: JSON.stringify(eventList)});
-   return;
-  } else { 
-    console.log("no event");
-    res.render('partials/calendar_demo',{layout:"dashboardLayout", pageHeader:"Calendar", username: req.session.user.username,events:false});
-    return;
-    }
-  }else {
-    res.redirect('/users/login');
-  }
-});
 
-router.route('/')
- .post((req,res)=>{
-    
-    // res.render('partials/login',{layout:"loginLayout"});
-  })
-  .get(async (req,res)=>{
+router.route('/').get(async (req,res)=>{
   if (req.session.user) {
     // req.session.user
     // users.find({});

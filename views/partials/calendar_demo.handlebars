@@ -1,23 +1,17 @@
 {{!-- <div class="col-xl-8 col-lg-7 square"> --}}
-    <div class="calendar">
+    <div class="calendar col">
       {{!-- {{session}}  --}}
         <div class="card shadow cld-main">
           
-          <!-- Card Header - Dropdown -->
+          <!-- Card Header - Back Button -->
           <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-            <h6 class="m-0"></h6>
-            <div class="dropdown no-arrow">
-              <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <em class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></em>
-              </a>
-              <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
-                <div class="dropdown-header">Dropdown Header:</div>
-                <a class="dropdown-item" href="#">Action</a>
-                <a class="dropdown-item" href="#">Another action</a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">Something else here</a>
+              
+              <div class="form-row">
+
+                <em onclick="window.history.go(-1); return false;" role="button" class="fas fa-angle-left fa-fw"></em>
+                <h6 onclick="window.history.go(-1); return false;" role="button">Go Back</h6>
+              
               </div>
-            </div>
       </div>
 
       <div id="calendar"></div>

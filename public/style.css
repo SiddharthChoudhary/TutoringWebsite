@@ -86,3 +86,16 @@ position: right;
 
   font-size:15px;
 } */
+
+.fixed-width{
+  width: 400px;
+}
+.fixed-title{
+
+  width:200px;
+}
+
+.fixed-body{
+
+  width:300px;
+}

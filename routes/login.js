@@ -39,18 +39,7 @@ router.get('/dashboard', async function(req,res,next){
     }
     
 });
-//route for viewing tutor's posted resources
-router.get('/tutor/resource/:id', async function(req,res,next){
-  if(!req.session.user){
-    res.redirect('users/login')
-    console.log("dash")
-  }else{
-    //console.log(req.session.user);
-    res.render('partials/default',{layout:"dashboardLayout", pageHeader:"Dashboard", username: req.session.user.username})
-     
-    }
-    
-});
+
 
 /* GET calendar. */
 // router.get('/calendar' , function(req, res, next) {
@@ -136,24 +125,5 @@ router.route('/profile_form')
 
     res.redirect("/profile_page");
   })
-
-
-  router.get(('/tutors'),async (req, res)=>{
-  if (req.session.user) {
-    const ppl= await User.find({"profile.tutor_position": "Taken"})
-    //query.exec(function (err, docs) {});
-    if(ppl.length){
-      tutors=ppl;
-      res.render('partials/tutors',{layout:"dashboardLayout", pageHeader:"Tutors", username: req.session.user.username, tutors:tutors});
-      return
-    }else{
-      req.flash("error","No tutors available")
-      res.redirect('/dashboard')
-      return
-    }
-  } else {
-    res.redirect('users/login');
-  }
- })
 
 module.exports = router;

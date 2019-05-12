@@ -18,6 +18,7 @@ var sessionChecker = (req, res, next) => {
       next();
   }    
 };
+
 const userSchema = Joi.object().keys({
   email: Joi.string().email().required(),
   username: Joi.string().required(),

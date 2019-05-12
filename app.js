@@ -11,6 +11,7 @@ const mongodb = require("mongodb");
 const flash = require('connect-flash');
 const session = require('express-session');
 const mongoose = require('mongoose')
+const helmet=require("helmet")
 const passport = require('passport')
 mongoose.Promise = global.Promise
 mongoose.connect('mongodb://localhost:27017/tutoringwebsite')
@@ -84,7 +85,7 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/tutoringw
     app.use('/users',require('./routes/users'))
     app.use('/calendar',require('./routes/events'));
     app.use('/checkInbox',require('./routes/ajaxInbox'));
-    app.use('/uploadFile',require('./routes/uploadFile'));
+    app.use('/tutors',require('./routes/tutors'));
     app.use(express.static(path.join(__dirname, "./public")));
     // app.use('/vendor', express.static(path.join(__dirname+'./vendor')));
     app.use("/topics", require("./routes/topics")(db));

@@ -1,7 +1,6 @@
 // $(document).ready(()=>{
 //     console.log("hellow")});
 var label = $("#inbox");
-var numer=0
 function myPeriodicMethod() {
   
     $.ajax({
@@ -12,7 +11,7 @@ function myPeriodicMethod() {
         if(requestArray){
            count = requestArray.length;
         }
-        if(!count){
+        if(count){
           label.html(count)
         }else{
           label.hide()

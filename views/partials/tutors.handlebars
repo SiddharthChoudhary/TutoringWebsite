@@ -1,31 +1,29 @@
 <div class="col-lg-8 mb-4">
-{{!-- Author--Jack Zhou --}}
-    <!-- Project Card Example -->
+{{!-- Author--Jack Zhou and Sid--}}
+    <!-- Tutor Infomation Page -->
     <div class="card shadow mb-5 nav-header">
-    
-    <div class="card-body">
-        
-        
+    <div class="card-body">   
 <ul class="navbar-nav">
 {{#each tutors}}
 <li>
 {{#if this.profile}}
-{{this.profile.firstname}}  {{this.profile.lastname}}
-<div>
-    <button class="" id="bookAnEvent" onclick="bookanEvent({{this._id}})"><a href="/calendar/event/{{this._id}}"></a>Book Event</button>
-    <button class="" id="seeSchedule" onclick="seeSchedule({{this._id}})"><a href="/calendar/request/{{this._id}}"></a>See Schedule</button>
-</div>
-{{else}} {{this.username}}
+<div class="form-col">
+    <div class="col">
+{{this.profile.firstname}}   {{this.profile.lastname}}
+    </div>
+<div class="form-row">
+    <a class="btn" href="/tutors/request/{{this._id}}">Book Event</a>
+    <a class="btn" href="/tutors/event/{{this._id}}">See Schedule</a>
+    <a class="btn" href="/tutors/resource/{{this._id}}">See Study Materials</a>
+</div> 
+</div> 
 {{/if}}
-</a></li>
+</li>
 {{/each}}
 
-    
 </ul>
-        
+        </div>
     </div>
-    </div>
-
 </div>
         
 
