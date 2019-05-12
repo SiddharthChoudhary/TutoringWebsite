@@ -10,7 +10,7 @@ const router = require("express").Router();
 */
 module.exports = (db) => {
     router.post("/new", (req, res) => {
-        if (req.session.user && req.cookies.user_sid) {
+        if (req.session.user) {
         const newComment = {
             id: shortid.generate(),
             creator:req.session.user._id,

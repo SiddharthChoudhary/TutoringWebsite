@@ -63,7 +63,7 @@ async function getById(id){
 }
 
 router.get("/form", (req, res)=>{
-  if (req.session.user && req.cookies.user_sid) {
+  if (req.session.user ) {
   res.render("requestForm", {layout:"dashboardLayout"});
   return;
  } else res.redirect('/users/login');
@@ -71,7 +71,7 @@ router.get("/form", (req, res)=>{
 
 
 router.post('/form/post', (req, res) => {
-  if(req.session.user && req.cookies.user_sid) {
+  if(req.session.user) {
     // const studId = req.session.user._id;
     // const tutorId = req.session.tutor;
     if(req.body.date == ''){
@@ -104,7 +104,7 @@ router.post('/form/post', (req, res) => {
 });
 
 router.get("/:id", (req, res)=>{
-  if (req.session.user && req.cookies.user_sid) {
+  if (req.session.user) {
    const tutorId=req.params.id;
    req.session.tutor=tutorId;
    console.log(req.session.tutor)
@@ -128,7 +128,7 @@ router.route('/')
     // res.render('partials/login',{layout:"loginLayout"});
   })
   .get(async (req,res)=>{
-  if (req.session.user && req.cookies.user_sid) {
+  if (req.session.user) {
     // req.session.user
     // users.find({});
   const events=await getById(req.session.user._id)

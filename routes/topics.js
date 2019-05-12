@@ -15,13 +15,13 @@ module.exports = (db) => {
     const commentsDb = require("../database/comments")(db);
 
     router.get("/new", (req, res) => {
-        if (req.session.user && req.cookies.user_sid) {
+        if (req.session.user) {
         res.render("newTopic", {layout:"dashboardLayout", pageHeader:"Discussion Board", username:req.session.user.username });
         } else res.redirect('/users/login');
     });
 
     router.get("/:id", (req, res) => {
-        if (req.session.user && req.cookies.user_sid) {
+        if (req.session.user) {
         const topicId = req.params.id;
         topicsDb.getTopic(topicId)
         .then(commentsDb.getAllComments)
@@ -39,7 +39,7 @@ module.exports = (db) => {
     });
 
     router.post("/new", (req, res) => {
-    if (req.session.user && req.cookies.user_sid) {
+    if (req.session.user) {
         const newTopic = {
             id: shortid.generate(),
             creator: req.session.user._id,

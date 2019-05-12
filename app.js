@@ -45,7 +45,7 @@ app.use('/vendor',vendor)
 
 app.use(session({
   key:'user_sid',
-  cookie: { maxAge: 20* 60000 },
+  cookie: { maxAge: 20 * 60000 },
   secret: 'codeworkrsecret',
   saveUninitialized: false,
   resave: false

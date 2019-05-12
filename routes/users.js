@@ -11,7 +11,7 @@ var path = require('path');
 
 //validation schema
 var sessionChecker = (req, res, next) => {
-  if (req.session.user && req.cookies.user_sid) {
+  if (req.session.user) {
       res.redirect('/');
       return;
   } else {
@@ -89,7 +89,7 @@ router.route('/register')
   })
  router.route('/logout')
       .get((req,res)=>{
-        if(req.session.user && req.cookies.user_sid){
+        if(req.session.user){
           res.clearCookie('user_sid')
           res.redirect('/users/login')
         }else{

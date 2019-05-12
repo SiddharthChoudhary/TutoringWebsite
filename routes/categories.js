@@ -3,7 +3,7 @@ const validCategories = ["study", "social", "health"];
 
 module.exports = (db) => {
     router.get("/:category", (req, res) => {
-        if (req.session.user && req.cookies.user_sid) {
+        if (req.session.user) {
         const category = req.params.category;
 
         if (validCategories.indexOf(category) > -1) {            

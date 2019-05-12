@@ -6,11 +6,15 @@
     <div class="card-body">
         
         
-<ul>
+<ul class="navbar-nav">
 {{#each tutors}}
-<li><a href="/calendar/{{this._id}}">
+<li>
 {{#if this.profile}}
 {{this.profile.firstname}}  {{this.profile.lastname}}
+<div>
+    <button class="" id="bookAnEvent" onclick="bookanEvent({{this._id}})"><a href="/calendar/event/{{this._id}}"></a>Book Event</button>
+    <button class="" id="seeSchedule" onclick="seeSchedule({{this._id}})"><a href="/calendar/request/{{this._id}}"></a>See Schedule</button>
+</div>
 {{else}} {{this.username}}
 {{/if}}
 </a></li>

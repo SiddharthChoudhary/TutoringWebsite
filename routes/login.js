@@ -15,7 +15,7 @@ const profileSchema = Joi.object().keys({
 
 /* GET home page. */
 router.get('/' , function(req, res, next) {
-  if (req.session.user && req.cookies.user_sid) {
+  if (req.session.user) {
     res.render('partials/default',{layout:"dashboardLayout", username:req.session.user.username});
   } else {
     res.redirect('users/login');
@@ -24,7 +24,7 @@ router.get('/' , function(req, res, next) {
 });
 
 router.get('/dashboard', async function(req,res,next){
-  if(!req.session.user && !req.cookies.user_sid){
+  if(!req.session.user){
     res.redirect('users/login')
     console.log("dash")
   }else{
@@ -62,7 +62,7 @@ router.get('/dashboard', async function(req,res,next){
 
 /* GET profile */
 router.get("/profile_page",(req, res)=>{
-  if (req.session.user && req.cookies.user_sid) {
+  if (req.session.user) {
     if(req.session.user.profile){
       let profile=req.session.user.profile;
       
@@ -75,7 +75,7 @@ router.get("/profile_page",(req, res)=>{
 
 router.route('/profile_form')
  .get((req, res)=>{
-  if (req.session.user && req.cookies.user_sid) {
+  if (req.session.user) {
     
       if(req.session.user.profile){
       let user=req.session.user.profile;
@@ -121,7 +121,7 @@ router.route('/profile_form')
 
 
   router.get(('/tutors'),async (req, res)=>{
-  if (req.session.user && req.cookies.user_sid) {
+  if (req.session.user) {
     const ppl= await User.find({"profile.tutor_position": "Taken"})
     //query.exec(function (err, docs) {});
     if(ppl.length){
