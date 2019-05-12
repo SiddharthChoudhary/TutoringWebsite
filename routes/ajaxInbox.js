@@ -20,5 +20,24 @@ router.route('/')
         res.send({data:[]})
     }
     })
-
+router.route('/acceptRequest')
+    .put(async (req,res)=>{
+        let requestId = req.body.requestId
+        let updated = await Requests.updateOne({'_id':requestId},{'state':1})
+        if(updated){
+            res.send({data:1})
+        }else{
+            res.send({data:0})
+        }
+    })
+router.route('/rejectRequest')
+    .put(async (req,res)=>{
+        let requestId = req.body.requestId
+        let updated = await Requests.updateOne({'_id':requestId},{'state':2})
+        if(updated){
+            res.send({data:1})
+        }else{
+            res.send({data:0})
+        }
+    })
   module.exports = router
