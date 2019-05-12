@@ -22,14 +22,11 @@ function parseObjectId(id){
 
 const reqSchema = Joi.object().keys({
   date: Joi.date().required(),
-  start_time:Joi.number().required(),
-  end_time: Joi.number().required(),
+  start_time:Joi.string().regex(/^([0-9]{2})\:([0-9]{2})$/).required(),
+  end_time: Joi.string().regex(/^([0-9]{2})\:([0-9]{2})$/).required(),
   title: Joi.string().required(),
   description: Joi.string().required(),
-  location: Joi.string().required(),
-  tutor: Joi.string().required(),
-  student: Joi.string().required(),
-  attendees:Joi.array().items(Joi.string())
+  location: Joi.string().required()
 })
 
 
@@ -62,62 +59,111 @@ async function getById(id){
   return result;
 }
 
-router.get("/form", (req, res)=>{
-  if (req.session.user && req.cookies.user_sid) {
-  res.render("requestForm", {layout:"dashboardLayout"});
-  return;
- } else res.redirect('/users/login');
-});
+
+function getMonth(monthStr){
+  return new Date(monthStr+'-1-01').getMonth()+1
+}
 
 
-router.post('/form/post', (req, res) => {
-  if(req.session.user && req.cookies.user_sid) {
+router.post('/form/post', (req, res, next) => {
+  if(req.session.user) {
     // const studId = req.session.user._id;
     // const tutorId = req.session.tutor;
-    if(req.body.date == ''){
-      req.flash('error', "Please choose a date");
-      res.redirect('/calendar/form');
-      return;
-    }
-    if(!req.body.title){
-      req.flash('error', "Please enter a title");
-      res.redirect('/calendar/form');
-      return;
-    }
-    if(req.body.description == ''){
-      req.flash('error', "Please describe the event");
-      res.redirect('/calendar/form');
-      return;
-    }
-    if(req.body.location == ''){
-      req.flash('error', "Please enter a location");
-      res.redirect('/calendar/form');
-      return;
-    }
+    //console.log()
 
-    const result = new requests({date: req.body.date, title:req.body.title, description: req.body.description, location: req.body.location, tutor:req.session.tutor, student:req.session.user._id, state: 0});
-    result.save();
-    res.redirect('/tutors');
+    // const request=req.body;
+    try {
+      const result = Joi.validate(req.body, reqSchema)
+      if (result.error) {
+        req.flash('error', 'The data entered is not valid. Please try again.')
+        res.redirect('/dashboard')
+        return;
+         }
+        else {
+          //let date=String(result.value.date).split("-") 
+          let date=String(result.value.date).split(" ")
+          let newEvent={
+          month: getMonth(date[1]),
+          day: date[2],
+          year: date[3],
+          start_time: String(result.value.start_time),
+          end_time: String(result.value.end_time),
+          description: result.value.description,
+          location: result.value.location,
+  // attendees: [ObjectId], gonna use 2 data fields to specify who's the tutor and who's the student
+          tutor: req.session.tutor, 
+          student: req.session.user._id,
+          state: 0
+          }
+          const request = new requests(newEvent)
+          request.save();
+          res.redirect('/tutors');
+          return;
+          //console.log(String(result.value.start_time))
+        }
+
+       } catch(error) {
+         next(error)
+      }
+    
+    // if(!req.body.date){
+    //   req.flash('error', "Please choose a date");
+    //   res.redirect('/calendar/form');
+    //   return;
+    // }
+    // if(!req.body.title){
+    //   req.flash('error', "Please enter a title");
+    //   res.redirect('/calendar/form');
+    //   return;
+    // }
+    // if(!req.body.start_time){
+    //   req.flash('error', "Please enter a title");
+    //   res.redirect('/calendar/form');
+    //   return;
+    // }
+    // if(!req.body.end_time){
+    //   req.flash('error', "Please enter a title");
+    //   res.redirect('/calendar/form');
+    //   return;
+    // }
+    // if(req.body.description == ''){
+    //   req.flash('error', "Please describe the event");
+    //   res.redirect('/calendar/form');
+    //   return;
+    // }
+    // if(req.body.location == ''){
+    //   req.flash('error', "Please enter a location");
+    //   res.redirect('/calendar/form');
+    //   return;
+    // }
+
+    // const result = new requests({date: req.body.date, title:req.body.title, start_time:String(req.body.start_time), end_time:String(req.body.end_time), description: req.body.description, location: req.body.location, tutor:req.session.tutor, student:req.session.user._id, state: 0});
+    // result.save();
+    // res.redirect('/tutors');
   } else {
     res.redirect('/users/login')
   }
 });
 
-router.get("/:id", (req, res)=>{
-  if (req.session.user && req.cookies.user_sid) {
-   const tutorId=req.params.id;
-   req.session.tutor=tutorId;
-   console.log(req.session.tutor)
-   res.redirect("form");
+router.get("/event/:id", (req, res)=>{
+  if (req.session.user) {
+    req.session.tutor=req.params.id;
+    res.render("requestForm", {layout:"dashboardLayout"});
+    return;
+   } else {
+   res.redirect('/users/login');
    return;
+   }
   //  res.render("requestForm", {layout:"dashboardLayout"});
-  }else {
-    res.redirect('/users/login');
-  return;}
 });
 
 router.get("/request/:id", (req, res)=>{
-  const tutorId=req.params.id;
+   req.session.tutor=req.params.id;
+
+});
+
+router.get("/event/:id", (req, res)=>{
+
 
 });
 
@@ -132,6 +178,7 @@ router.route('/')
     // req.session.user
     // users.find({});
   const events=await getById(req.session.user._id)
+  console.log(events)
   if (events !== null) {
   let eventList=[];
   for (let i=0; i<events.length;i++){
@@ -156,7 +203,8 @@ router.route('/')
   //       {"Year": 2019, "Month":5, "Day":17},
   //       {"Year": 2019, "Month":5, "Day":2},
   //     ];
-  else{ res.render('partials/calendar_demo',{layout:"dashboardLayout", pageHeader:"Calendar", username: req.session.user.username, events: JSON.stringify([])});
+  else{ 
+    res.render('partials/calendar_demo',{layout:"dashboardLayout", pageHeader:"Calendar", username: req.session.user.username, events: JSON.stringify([])});
     return;}
   } else {
     res.redirect('/users/login');

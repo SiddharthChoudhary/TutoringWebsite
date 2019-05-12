@@ -4,9 +4,11 @@ const Schema = mongoose.Schema
 var ObjectId = Schema.Types.ObjectId;
 // 2
 const reqSchema = new Schema({
-  date: Date,
-  start_time: Number,
-  end_time: Number,
+  month: Number,
+  day: Number,
+  year: Number,
+  start_time: String,
+  end_time: String,
   title: String,
   description: String,
   location: String,
@@ -14,7 +16,6 @@ const reqSchema = new Schema({
   tutor: ObjectId,
   student: ObjectId,
   state: Number // initialize to 0. If approved, set to 1. If rejected, set to 2
-  
 }, {
  
   // 3
