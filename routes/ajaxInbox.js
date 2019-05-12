@@ -38,7 +38,7 @@ router.route('/acceptRequest')
             location:request.location,
             tutor:request.tutor,
             student:request.student,
-            attendees:[request.student,request.tutor]
+            attendees:[{_id:request.student},{_id:request.tutor}]
         }
 
         let eventModel = new Events(event)
