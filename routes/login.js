@@ -34,6 +34,19 @@ router.get('/dashboard', async function(req,res,next){
     }
     
 });
+//route for viewing tutor's posted resources
+router.get('/tutor/resource/:id', async function(req,res,next){
+  if(!req.session.user){
+    res.redirect('users/login')
+    console.log("dash")
+  }else{
+    //console.log(req.session.user);
+    res.render('partials/default',{layout:"dashboardLayout", pageHeader:"Dashboard", username: req.session.user.username})
+     
+    }
+    
+});
+
 /* GET calendar. */
 // router.get('/calendar' , function(req, res, next) {
 //   if (req.session.user && req.cookies.user_sid) {

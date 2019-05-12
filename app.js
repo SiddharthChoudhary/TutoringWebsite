@@ -8,7 +8,6 @@ const hbs = require("handlebars");
 const moment = require("moment");
 const expressHbs = require("express-handlebars");
 const mongodb = require("mongodb");
-const helmet=require("helmet");
 const flash = require('connect-flash');
 const session = require('express-session');
 const mongoose = require('mongoose')
@@ -43,6 +42,7 @@ const vendor = express.static(path.join(__dirname+'/vendor'))
 const port = process.env.PORT || 3000;
 
 app.use('/vendor',vendor)
+
 
 app.use(session({
   key:'user_sid',
@@ -85,7 +85,9 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/tutoringw
     app.use('/users',require('./routes/users'))
     app.use('/calendar',require('./routes/events'));
     app.use('/checkInbox',require('./routes/ajaxInbox'));
+
     app.use(express.static(path.join(__dirname, "./public")));
+    // app.use('/vendor', express.static(path.join(__dirname+'./vendor')));
     app.use("/topics", require("./routes/topics")(db));
     app.use("/comments", require("./routes/comments")(db));
     app.use("/categories", require("./routes/categories")(db));
