@@ -65,9 +65,15 @@ router.route('/register')
         res.redirect('/users/register')
         return
       }
-      const user = await User.findOne({ 'email': result.value.email })
+      let user = await User.findOne({ 'email': result.value.email })
       if (user) {
         req.flash('error', 'Email is already in use.')
+        res.redirect('/users/register')
+        return
+      }
+      user = await User.findOne({ 'username': result.value.username })
+      if (user) {
+        req.flash('error', 'Username is already in use.')
         res.redirect('/users/register')
         return
       }

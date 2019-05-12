@@ -26,11 +26,16 @@ router.get('/' , function(req, res, next) {
 router.get('/dashboard', async function(req,res,next){
   if(!req.session.user){
     res.redirect('users/login')
-    console.log("dash")
   }else{
     //console.log(req.session.user);
-    res.render('partials/default',{layout:"dashboardLayout", pageHeader:"Dashboard", username: req.session.user.username})
-     
+    let user =  await User.find({'username':req.session.user.username})
+    let ifTutor = false
+    if(user){
+      if(user[0].profile.tutor_position=='Taken'){
+        ifTutor = true
+      }
+    }
+    res.render('partials/default',{layout:"dashboardLayout", pageHeader:"Dashboard", username: req.session.user.username,'ifTutor':ifTutor})
     }
     
 });

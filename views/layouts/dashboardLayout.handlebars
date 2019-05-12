@@ -159,14 +159,7 @@
               </div>
             </div>
           </form>
-          <div>
-          {{#if success_messages }}
-            <div class="alert alert-success">{{success_messages}}</div>
-          {{/if}}
-          {{#if error_messages }}
-          <div class="alert alert-danger">{{error_messages}}</div>
-          {{/if}}
-          </div>
+          
           <!-- Topbar Navbar -->
           <ul class="navbar-nav ml-auto">
 
@@ -342,6 +335,14 @@
           <!-- Content Row -->
 
           <div class="row">
+            <div class= "form-row">
+          {{#if success_messages }}
+            <div class="alert alert-success">{{success_messages}}</div>
+          {{/if}}
+          {{#if error_messages }}
+          <div class="alert alert-danger">{{error_messages}}</div>
+          {{/if}}
+          </div>
 
             <!-- Area Chart -->
             

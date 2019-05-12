@@ -8,11 +8,11 @@ const hbs = require("handlebars");
 const moment = require("moment");
 const expressHbs = require("express-handlebars");
 const mongodb = require("mongodb");
+const helmet=require("helmet");
 const flash = require('connect-flash');
 const session = require('express-session');
 const mongoose = require('mongoose')
 const passport = require('passport')
-const helmet = require('helmet')
 mongoose.Promise = global.Promise
 mongoose.connect('mongodb://localhost:27017/tutoringwebsite')
 const app = express()
@@ -84,6 +84,7 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/tutoringw
     app.use('/users',require('./routes/users'))
     app.use('/calendar',require('./routes/events'));
     app.use('/checkInbox',require('./routes/ajaxInbox'));
+    app.use('/uploadFile',require('./routes/uploadFile'));
     app.use(express.static(path.join(__dirname, "./public")));
     app.use("/topics", require("./routes/topics")(db));
     app.use("/comments", require("./routes/comments")(db));

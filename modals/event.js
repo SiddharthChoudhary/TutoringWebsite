@@ -10,8 +10,8 @@ var eventSchema = new Schema({
     // No need for "Creator" in events
     // creator: ObjectId,
     date: Date,
-    start_time: Number,
-    end_time: Number,
+    start_time: String,
+    end_time: String,
     title: String,
     description: String,
     location: String,
