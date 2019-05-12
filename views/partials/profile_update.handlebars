@@ -33,7 +33,6 @@
       <label class="form-check-label" for="tutor_position">
         Are you a tutor?
       </label>
-      
     </div>
   </div>
   <div id="form1">
@@ -55,6 +54,7 @@
   <button id="submitProfile" type="submit" class="btn btn-primary">Submit</button>
   <script>$("#tutor_position").click(function(){
         $("#form1").toggle();
+       });
         function xssSaviour(){
           $("#submitProfile").click(function(){
               var firstName = $("#firstname").val();
@@ -66,12 +66,11 @@
               var encodedLastName  = $('<div />').text(lastname).html();
               var bio              = $('<div/>').text(bio).html();
 
-              $('#firstName').val(encodedfirstName);
-              $('#lastName').val(encodedLastName);
-              $('#id').val(bio);
+              $('#firstname').val(encodedfirstName);
+              $('#lastname').val(encodedLastName);
+              $('#bio').val(bio);
             });
             return true;
-        }
-    });</script>
+        }</script>
 </form>
 </div>
