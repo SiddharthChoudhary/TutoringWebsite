@@ -99,3 +99,6 @@ position: right;
 
   width:300px;
 }
+.widthAuto{
+  width: auto !important;
+}
