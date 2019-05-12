@@ -1,5 +1,6 @@
 const events = require('../modals/event').model;
 const users = require('../modals/user').model;
+const files = require('../modals/resource').model;
 const express = require('express');
 const router = express.Router()
 const {ObjectId}=require("mongodb");
@@ -22,6 +23,15 @@ async function getById(id){
     const result=await events.find({"attendees._id":parsedId});
     return result;
   }
+
+
+function isValidURL(value){
+    {
+        var expression = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi
+        var regexp = new RegExp(expression);
+        return regexp.test(value);
+    } 
+    }
 
 
 async function parseEvent(id){
@@ -52,9 +62,9 @@ async function parseEvent(id){
 
 
   const uploadSchema = Joi.object().keys({
-    title: Joi.string().email().required(),
+    title: Joi.string().required(),
     description: Joi.string().required(),
-    link: Joi.string().regex(/^[a-zA-Z0-9]{6,30}$/).required()
+    link: Joi.string().uri().required()
   })
 
   router.get(('/'),async (req, res)=>{
@@ -82,6 +92,7 @@ router.get('/resource/:id', async function(req,res,next){
       //console.log("dash")
     }else{
       //console.log(req.session.user);
+
       res.render('partials/default',{layout:"dashboardLayout", pageHeader:"Dashboard", username: req.session.user.username})
        
       } 
@@ -121,11 +132,24 @@ router.get("/request/:id", (req, res)=>{
   });
 
   //for uploading study material links to show on a page
-  router.post("/upload", (req, res)=>{
+  router.post("/upload", async (req, res)=>{
     if (req.session.user) {
       const tutorId=req.session.user._id;
+      const result = Joi.validate(req.body, uploadSchema)
+      if (result.error || !isValidURL(req.body.link)) {
+        req.flash('error', 'Data entered is not valid. Or the URL is invalid.');
+        res.redirect("/dashboard");
+        return;
+      }else {
+        result.value.creator=req.session.user._id;
+        console.log(result.value.creator)
+        const newFile = await new files(result.value)
+        await newFile.save()
+        req.flash('error', 'File is successfully uploaded!');
+        res.redirect("/dashboard");
+        return;
+      }
       //res.render("requestForm", {layout:"dashboardLayout", pageHeader:"Request Form", username: req.session.user.username});
-      return;
      } else {
        res.redirect('/users/login');
        return;
