@@ -11,7 +11,7 @@ seeder.connect('mongodb://localhost/tutoringwebsite', function() {
  
   // Clear specified collections
   // **** this clears the current userdb, so seeding multiple times gives you the same db.
-  seeder.clearModels(['user'], function() {
+  seeder.clearModels(['User'], function() {
  
     // Callback to populate DB once collections have been cleared
     seeder.populateModels(data, function() {
@@ -24,7 +24,7 @@ seeder.connect('mongodb://localhost/tutoringwebsite', function() {
 // Data array containing seed data - documents organized by Model
 var data = [
     {
-        'model': 'user',
+        'model': 'User',
         'documents': [
           {
             email: "seed1@gmail.com",
@@ -44,7 +44,7 @@ var data = [
         ]
     },
     {
-      'model': 'user',
+      'model': 'User',
       'documents': [
         {
           email: "seed2@gmail.com",
@@ -64,7 +64,7 @@ var data = [
       ]
     },
     {
-      'model': 'user',
+      'model': 'User',
       'documents': [
         {
           email: "seed3@gmail.com", // this one does not have a profile. But can be added after logging in

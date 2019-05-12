@@ -12,6 +12,7 @@ var eventSchema = new Schema({
     month: Number,
     day: Number,
     year: Number,
+
     start_time: String,
     end_time: String,
     title: String,
