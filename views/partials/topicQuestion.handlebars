@@ -2,15 +2,19 @@
   <div class="card-header">
     <h4><a class="card-title" href="/topics/{{id}}">{{title}}</a></h4>
     
+  </div>
+  <div class="card-body">
+    
+    {{description}} 
+  </div>
+  <div class="card-footer">
     <h6 class="card-subtitle">
       Posted at {{formatDate postDate}} in 
       <a href="/categories/{{category}}" class="category-link">{{category}}</a>
       with {{comments.length}} comments by {{creator}}
       
     </h6>
-  </div>
-  <div class="card-body">
-    {{description}} 
-  </div>
+    </div>
+  
   
 </div>

@@ -1,0 +1,26 @@
+<article>
+    <div>
+        <h1>
+            Profile Found
+        </h1>
+        <br/>
+        <h2>
+            matched Name: {{profileName}}
+        </h2>
+    </div>
+    <br/>
+    <main>
+        <div>
+            <ul>
+                {{#each found}}
+                    <li>
+                            <a href="/details/{{id}}">{{name}}</a>
+                    </li>
+                {{/each}}
+
+            </ul>
+            <p>{{error}}</p>
+        </div>
+    </main>
+
+</article>

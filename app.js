@@ -87,7 +87,9 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/tutoringw
     app.use('/checkInbox',require('./routes/ajaxInbox'));
     app.use('/tutors',require('./routes/tutors'));
     app.use('/about',(req,res,next)=>{
-      res.render('aboutUs')
+      if(req.session.user){
+      res.render('aboutUs', {layout: false})
+      } else{res.redirect("/")}
     })
     app.use(express.static(path.join(__dirname, "./public")));
     // app.use('/vendor', express.static(path.join(__dirname+'./vendor')));

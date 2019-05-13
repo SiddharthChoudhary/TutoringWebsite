@@ -24,11 +24,6 @@
 
   <link rel="stylesheet" href="../../public/style.css"> 
    
-   {{!-- <link rel="stylesheet"
-          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
-          crossorigin="anonymous"> --}}
-
    <script src="/socket.io/socket.io.js"></script> 
   
 </head>
@@ -148,11 +143,11 @@
           </button>
 
           <!-- Topbar Search -->
-          <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+          <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" method="post" action="/search">
             <div class="input-group">
               <input type="text" name="search" class="form-control bg-light border-0 small" placeholder="Search for the person" aria-label="Search">
               <div class="input-group-append">
-                <button class="btn btn-primary" type="button">
+                <button class="btn btn-primary" type="submit">
                   <em class="fas fa-search fa-sm"></em>
                 </button>
               </div>
@@ -193,7 +188,7 @@
                 <h6 class="dropdown-header">Message Center</h6>
                 <div class="inbox-container">
 
-                  <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>
+                  <a class="dropdown-item text-center small text-gray-500" href="/request">Read More Messages</a>
                 </div>
               </div>
             </li>
@@ -203,7 +198,7 @@
             <!-- Nav Item - User Information -->
             <li class="nav-item dropdown no-arrow">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{username}} </span>
+                <span class="mr-2 d-none d-lg-inline text-gray-900 small">{{username}} </span>
                 <img class="img-profile rounded-circle" src="https://www.w3schools.com/w3images/lights.jpg" alt="profile image">
               </a>
               <!-- Dropdown - User Information -->

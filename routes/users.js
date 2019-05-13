@@ -1,8 +1,9 @@
 var express = require('express');
 var router = express.Router();
-var session = require('express-session');
+const requests=require("../modals/request").model
 const User = require('../modals/user').model
 const Joi = require('joi')
+const {ObjectId}=require("mongodb");
 
 const profileSchema = Joi.object().keys({
   firstname: Joi.string().required(),
@@ -13,15 +14,83 @@ const profileSchema = Joi.object().keys({
   subject: Joi.string().required()
 })
 
+function parseObjectId(id){ 
+  id=String(id);  
+  try { 
+      return ObjectId.createFromHexString(id);
+      
+  } catch (e) {
+      throw "ObjectId is invalid!";
+  }
+};
+
+async function parseRequest(requests){
+let requestList=[]
+for (let i=0;i< requests.length;i++){
+    let title=requests[i].title
+    let date=(requests[i].month+1) +"/" + requests[i].day +"/"+requests[i].year
+    let time=requests[i].start_time +"-" +requests[i].end_time
+    let description=requests[1].description
+    let location=requests[i].location
+    let state;
+    if(requests[i].state===0){
+      state="Pending"
+    } else if (requests[i].state===1){
+      state="Approved"
+    } else if(requests[i].state===2){
+      state="Rejected"
+    }
+    const studentID=parseObjectId(requests[i].student)
+    const student=await User.findOne({_id: studentID})
+    if(student===null) {
+      return false;
+    }
+
+    let request= {
+        title: title,
+        student:student.profile.firstname+" "+student.profile.lastname,
+        date: date,
+        time: time,
+        description: description,
+        location: location,
+        state: state
+    }
+    requestList.push(request)
+}
+ return requestList;
+}
+
+
 /* GET home page. */
 router.get('/' , function(req, res, next) {
-  if (req.session.user) {
-    res.render('partials/default',{layout:"dashboardLayout", username:req.session.user.username});
+  if (req.session.user){
+    res.render('partials/default',{layout:"dashboardLayout", pageHeader:"Dashboard",username:req.session.user.username});
   } else {
     res.redirect('users/login');
   }
-  
 });
+
+/* GET read more message page. */
+router.get('/request' , async function(req, res, next) {
+  if (req.session.user) {
+      const allRequests=await requests.find({tutor: req.session.user._id});
+      if(allRequests.length){
+      const messages= await parseRequest(allRequests);
+      if(!messages){
+        req.flash("error", "The student with " + '${studentID}' + "cannot be found.")
+        res.redirect("/")
+      }
+      res.render('allRequests',{layout:"dashboardLayout", pageHeader: "My Received Request Messages",username:req.session.user.username, requests: messages});
+      } else{
+        req.flash("error", "You do have any request message as a tutor.")
+        res.redirect("/")
+      }
+    } else {
+    res.redirect('users/login');
+  }
+});
+
+
 
 router.get('/dashboard', async function(req,res,next){
   if(!req.session.user){
@@ -102,5 +171,77 @@ router.route('/profile_form')
     req.flash("success", "The file is successfully updated!")
     res.redirect("/profile_page");
   })
+
+
+  //Zejie Yao section as below
+  async function findProfileById(id){
+    let profile = await User.findOne({_id:id});
+    return profile;
+}
+
+async function findProfileByName (name){
+    if(typeof name !== 'string') throw 'Please input right type of name.'
+    name = name.toLowerCase()
+    let matchedProfile = []
+    let data = await User.find({});
+   
+    for(let i in data){
+        let name1 = data[i].profile["firstname"] + ' ' +data[i].profile["lastname"];
+        name1 = name1.toLowerCase();
+        if(name1.includes(name)){
+            matchedProfile.push(data[i]);
+        }
+    }
+    // console.log(matchedProfile)
+    return matchedProfile
+}
+
+router.route('/search')
+    .post( async (req,res)=>{
+        console.log("in search route")
+        let name = req.body.search
+        // console.log(User.profile.firstname)
+        let matchedProfile = await findProfileByName(name)
+        if(!matchedProfile){
+            res.render('partials/profilefound',{
+                profileName:name,
+                error:'not found',
+                title:'Profile found'
+            })
+            return
+        }
+        // console.log(matchedProfile)
+
+        res.render('partials/profilefound',{
+            profileName:name,
+
+            found:matchedProfile
+
+                .map((x)=>{
+                x.profile
+                // console.log(x.profile.firstname + ' ' + x.profile.lastname)
+                return {
+                    id:x._id,
+                    name:x.profile.firstname + ' ' + x.profile.lastname
+
+                }
+            }),
+            title:'Profile found'
+        })
+    })
+
+router.route('/details/:id')
+    .get(async (req, res) => {
+        try {
+            let profileId = req.params.id
+            let profile = await findProfileById(profileId)
+            console.log(profile)
+            res.render('partials/profiledetail', {layout:"dashboardLayout", pageHeader:"Profile", username: req.session.user.username, profile: profile.profile})
+        } catch (e) {
+            res.sendStatus(500);
+        }
+    })
+
+
 
 module.exports = router;

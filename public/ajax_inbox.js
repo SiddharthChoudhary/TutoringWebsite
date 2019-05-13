@@ -71,7 +71,7 @@ function myPeriodicMethod() {
             }
           }
           $('.inbox-container').append(
-            '<a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>'
+            '<a class="dropdown-item text-center small text-gray-500" href="/request">Read More Messages</a>'
           )
         }
         if(count){
@@ -82,12 +82,12 @@ function myPeriodicMethod() {
       },
       complete: function() {
         // schedule the next request *only* when the current one is complete:
-        setTimeout(myPeriodicMethod, 1000);
+        setTimeout(myPeriodicMethod, 2000);
       }
     });
   }
 //   // schedule the first invocation:
-setTimeout(myPeriodicMethod, 6000);
+setTimeout(myPeriodicMethod, 1000);
 
 // (function($) {
     // Let's start writing AJAX calls!

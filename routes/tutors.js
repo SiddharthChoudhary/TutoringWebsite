@@ -18,12 +18,6 @@ function parseObjectId(id){
   }
 };
 
-async function getById(id){
-    const parsedId=parseObjectId(id);
-    const result=await events.find({"attendees._id": parsedId});
-    return result;
-  }
-
 
 function isValidURL(value){
     {
@@ -145,7 +139,7 @@ router.get('/resource/:id', async function(req, res, next){
         const parsedId=parseObjectId(req.params.id);
         let deletionInfo = await files.deleteOne({_id: parsedId})
         if (deletionInfo.deletedCount === 0) {
-            req.flash("error", "Could not delete link with id of "+ '${id}');
+            req.flash("error", "Could not delete link with id of "+ '${parsedId}');
             res.redirect("/tutors/resource");
         }
         req.flash("success", "The link has been successfully removed!");
@@ -163,7 +157,7 @@ router.get('/resource/:id', async function(req, res, next){
         const updateFile=req.body;
         let deletionInfo = await files.updateOne({'_id': parsedId}, {$set: updateFile})
         if (deletionInfo.updatedCount === 0) {
-            req.flash("error", "Could not update link with id of "+ '${id}');
+            req.flash("error", "Could not update link with id of "+ '${parsedId}');
             res.redirect("/tutors/resource");
         }
         req.flash("success", "The link has been successfully updated!")

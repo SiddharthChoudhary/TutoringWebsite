@@ -2,9 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 module.exports = (db) => {
-    // router.use(bodyParser.json());
-    // router.use(bodyParser.urlencoded({ extended: false }));
-
+   
     router.get("/", (req, res) => {
         if (req.session.user) {
         db.collection('topics').find({}).sort({ _id: -1 }).limit(10).toArray((err, docs) => {

@@ -3,15 +3,16 @@
     <!-- Tutor Uploaded Resources Page -->
     <div class="card shadow mb-5 nav-header">
     <div class="card-body">   
-        {{#if files}}   
+        {{#if requests}}   
 <ul>
 
-{{#each files}}
+{{#each requests}}
 <li>
 
  <div class="form-row">
-<a href={{this.link}} target="_blank"> {{this.title}}</a>
- <p>({{this.description}})</p> 
+<a > {{title}}</a>
+ <p>({{description}})</p> 
+ <p>({{state}})</p> 
  </div>
  
 </li>
