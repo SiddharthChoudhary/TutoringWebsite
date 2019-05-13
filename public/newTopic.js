@@ -13,12 +13,12 @@ window.addEventListener('DOMContentLoaded', function(){
 	    title = document.getElementById('title').value
 			description = document.getElementById('description').value
 			let category = document.getElementById('category').value;
-			console.log("new topic")
-		if (title == '' || description == '' || category == ''){
-			$('.new-topic .alert').removeClass('hidden');
+			//console.log("new topic")
+		if (title === '' || description === '' || category === ''){
+			$('.error-message').removeClass('hidden');
 			return;
 		} else {
-			$('.new-topic .alert').addClass('hidden');
+			$('.error-message').addClass('hidden');
 		}
 		
 		document.getElementById('title').value = '';

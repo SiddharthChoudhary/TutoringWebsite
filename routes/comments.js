@@ -13,7 +13,7 @@ module.exports = (db) => {
         if (req.session.user) {
         const newComment = {
             id: shortid.generate(),
-            creator:req.session.user._id,
+            creator:req.session.user.username,
             content: req.body.content,
             postDate: Date.now(),
             topicId: req.body.topicId

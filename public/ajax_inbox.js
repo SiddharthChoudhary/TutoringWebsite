@@ -59,7 +59,7 @@ function myPeriodicMethod() {
                 +'</div>'
                 +'<div class="font-weight-bold">'
                   +'<div class="text-truncate"> '+requestArray[i].description+' </div>'
-                  +'<div class="small text-gray-500">'+requestArray[i].month+'/'+requestArray[i].day+'/'+requestArray[i].year+'-'+requestArray[i].start_time+' to '+requestArray[i].end_time+'</div>'
+                  +'<div class="small text-gray-500">'+(requestArray[i].month+1)+'/'+requestArray[i].day+'/'+requestArray[i].year+'-'+requestArray[i].start_time+' to '+requestArray[i].end_time+'</div>'
                 +'</div>'
                 +'<div class="align-items-right">'
                   +'<button id="'+requestId+'" class="btn btn-success" onclick="acceptRequest(this)" style="border-radius:30px;margin-bottom:10px">Accept</button>'

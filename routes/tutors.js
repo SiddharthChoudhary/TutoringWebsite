@@ -186,7 +186,7 @@ router.get("/event/:id", async (req, res)=>{
     } else { 
       console.log("no event");
       res.render('partials/calendar_demo',{layout:"dashboardLayout", pageHeader:"Calendar", 
-      username: req.session.user.username, events:false, returnBtn: true});
+      username: req.session.user.username, events:false});
       return;
       }
     }else {
@@ -197,6 +197,7 @@ router.get("/event/:id", async (req, res)=>{
   //route for making request
 router.get("/request/:id", (req, res)=>{
     if (req.session.user) {
+      req.session.tutor=req.params.id;
       res.render("requestForm", {layout:"dashboardLayout", pageHeader:"Request Form", username: req.session.user.username});
       return;
      } else {

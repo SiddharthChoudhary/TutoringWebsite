@@ -20,6 +20,19 @@ router.route('/')
         res.send({data:[]})
     }
     })
+
+
+async function validateEvent(id, request){
+  const event=await Events.find({'attendees._id':id});
+  console.log("false")
+  // validate event to avoid having more than one event on one day
+  for(let i=0;i<event.length; i++){
+     if(event[i].month===request.month &&event[i].day===request.day &&
+        event[i].year===request.year ){ console.log(false);
+             return false}
+  } return true;
+}
+
 router.route('/acceptRequest')
     .put(async (req,res)=>{
         let requestId = req.body.requestId
@@ -27,6 +40,11 @@ router.route('/acceptRequest')
         if(updated){
             res.send({data:1})
         let request = await Requests.findById({'_id':requestId})
+        if(!await validateEvent(req.session.user._id, request)){
+           req.flash('error',"You have already scheduled an event on that day!")
+           return;
+        }else{
+
         let event = {
             month: request.month,
             day: request.day,
@@ -45,7 +63,9 @@ router.route('/acceptRequest')
         eventModel.save(function(err,event){
             if(err) return console.error(err)
         })
-        }else{
+        }
+       }
+        else{
             res.send({data:0})
         }
     })
