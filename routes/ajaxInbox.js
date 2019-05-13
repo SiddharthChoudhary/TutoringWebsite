@@ -17,7 +17,7 @@ router.route('/')
             res.send({data:[]})
         }
     }else{
-        res.send({data:[]})
+        res.redirect('/')
     }
     })
 router.route('/acceptRequest')

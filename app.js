@@ -92,7 +92,7 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/tutoringw
     app.use("/comments", require("./routes/comments")(db));
     app.use("/categories", require("./routes/categories")(db));
     app.use("*",(req, res, next) => {
-      res.render('partials/notFound')
+      res.render('partials/notFound',{layout:false})
     });
 
     server.listen(port, () => {
