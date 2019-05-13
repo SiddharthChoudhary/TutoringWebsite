@@ -27,8 +27,10 @@ window.addEventListener('DOMContentLoaded', function(){
 			id = document.getElementById('hidden').innerHTML;
 
 		if (comment == ''){
-			document.getElementById("errorModal").classList.add("active");
-			return;
+				$('.error-message').removeClass('hidden');
+				return;
+			} else {
+				$('.error-message').addClass('hidden');
 		}
 		
 		document.getElementById('comment').value = '';

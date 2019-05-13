@@ -1,0 +1,22 @@
+<div class="col-lg-8 mb-4">
+{{!-- Author--Jack Zhou and Sid--}}
+    <!-- Tutor Uploaded Resources Page -->
+    <div class="card shadow mb-5 nav-header">
+    <div class="card-body">   
+<ul>
+{{#each files}}
+<li>
+<div class="form-col">
+ <div class="form-row">
+<a href={{this.link}} target="_blank"> {{this.title}}</a>
+ <p>({{this.description}})</p> 
+ </div>
+  <div class="form-row">
+ <a href="/tutors/delete/{{this._id}}" data-method="post">Delete</a>
+ <a href="/tutors/update/{{this._id}}"> Edit</a>
+ </div>
+ </div>
+</li>
+{{/each}}
+</ul>
+</div></div></div>

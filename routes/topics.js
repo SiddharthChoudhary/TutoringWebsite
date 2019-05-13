@@ -40,9 +40,13 @@ module.exports = (db) => {
 
     router.post("/new", (req, res) => {
     if (req.session.user) {
+        //db.collection('users').findOne({_id: req.session.user.});
+
+
+
         const newTopic = {
             id: shortid.generate(),
-            creator: req.session.user._id,
+            creator: req.session.user.username,
             title: req.body.title,
             description: req.body.description,
             postDate: Date.now(),

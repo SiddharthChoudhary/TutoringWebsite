@@ -102,3 +102,8 @@ position: right;
 .widthAuto{
   width: auto !important;
 }
+
+#view_resource{
+
+  color:white;
+}

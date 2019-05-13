@@ -38,7 +38,7 @@ async function parseEvent(id){
   }
    return eventList;
  } else {
-   console.log("false")
+   //console.log("false")
    return false;
   };
 };
@@ -81,7 +81,7 @@ async function getById(id){
 
 
 function getMonth(monthStr){
-  return new Date(monthStr+'-1-01').getMonth()+1
+  return new Date(monthStr+'-1-01').getMonth()
 }
 
 router.post('/form/post', (req, res, next) => {
@@ -90,7 +90,7 @@ router.post('/form/post', (req, res, next) => {
       const result = Joi.validate(req.body, reqSchema)
       if (result.error) {
         req.flash('error', 'The data entered is not valid. Please try again.')
-        res.redirect('/dashboard')
+        res.redirect('/tutors/request/'+req.session.tutor)
         return;
          }
         else {
@@ -125,8 +125,7 @@ router.post('/form/post', (req, res, next) => {
 
 router.route('/').get(async (req,res)=>{
   if (req.session.user) {
-    // req.session.user
-    // users.find({});
+  
    let eventList=await parseEvent(req.session.user._id);
    if(eventList){
    res.render('partials/calendar_demo',{ layout:"dashboardLayout", pageHeader:"Calendar", username: req.session.user.username, events: JSON.stringify(eventList)});
@@ -141,24 +140,6 @@ router.route('/').get(async (req,res)=>{
   }
   
 });
-
-
-
-
-
-
-// // does not support *update* yet
-
-// const remove = async function remove(id){
-//   const checkedId = checkObjectId(id);
-//   const events = await eventCollection();
-//   const deletedEvent = await getById(checkedId);
-//   await events.deleteOne({ _id: checkedId });
-//   return {
-//     deleted: true,
-//     data: deletedEvent
-//   }
-// }
 
 
 module.exports = router;

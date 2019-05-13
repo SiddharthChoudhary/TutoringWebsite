@@ -1,7 +1,5 @@
 
 
-          
-          {{#if this.ifTutor}}
           <div class="col-md-8 fixed-width">
               <div class="card border-left-primary shadow h-100 py-2 fixed-width">
                 <div class="card-body fixed-width">
@@ -9,31 +7,28 @@
                     <div class="col mr-2">
                       <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Upload Resource</div>
                       <div>
-                        <form action="/tutors/upload" method="POST" id='uploadForm'>
+                        <form action="/tutors/update/{{id}}" method="post" id='updateForm'>
                   <div class="form-group fixed-title">
                     <label class="font-weight-bold text-primary fixed-title text-uppercase" for="title">Title</label>
-                    <input type="text" class="form-control" name="title" id="title_resource" placeholder="Title"/>
+                    <input type="text" class="form-control" name="title" id="title_resource2" placeholder="Title" value="{{title}}"/>
                   </div>
                   <div class="form-group fixed-body">
                     <label class="font-weight-bold text-primary fixed-title text-uppercase" for="description">Description</label>
-                    <input type="text" class="form-control" name="description" id="description_resource" placeholder="Description"/>
+                    <input type="text" class="form-control" name="description" id="description_resource2" placeholder="Description" value="{{description}}"/>
                   </div>
                   <div class="form-group fixed-body">
                     <label class="font-weight-bold text-primary fixed-title text-uppercase" for="description">Link</label>
-                    <input type="text" class="form-control" name="link" id="link_resource" placeholder="Link..."/>
+                    <input type="text" class="form-control" name="link" id="link_resource2" placeholder="Link..." value="{{link}}"/>
                   </div>
                       <div class="form-group">
                         <input class="form-control-button btn btn-primary " type='submit' value='Upload!'/>
                       </div>
                       </form>
-                      <div class="form-group">
-                        <a id="view_resource" href="/tutors/resource" class="form-control-button btn btn-primary ">View the Uploaded Resource</a>
-                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          {{/if}}
+        
 

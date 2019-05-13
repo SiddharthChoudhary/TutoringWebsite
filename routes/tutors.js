@@ -14,7 +14,7 @@ function parseObjectId(id){
       return ObjectId.createFromHexString(id);
       
   } catch (e) {
-      throw "ObjectId is invalid.";
+      throw "ObjectId is invalid!";
   }
 };
 
@@ -86,24 +86,99 @@ async function parseEvent(id){
    })
 
 //route for viewing tutor's posted resources
-router.get('/resource/:id', async function(req,res,next){
+router.get('/resource/:id', async function(req, res, next){
     if(!req.session.user){
       res.redirect('users/login')
-      //console.log("dash")
+      return;
     }else{
       //console.log(req.session.user);
-
-      res.render('partials/default',{layout:"dashboardLayout", pageHeader:"Dashboard", username: req.session.user.username})
-       
+      const parsedId=parseObjectId(req.params.id);
+      const allFiles= await files.find({creator: parsedId})
+      console.log(allFiles)
+      res.render('resourceList',{layout:"dashboardLayout", pageHeader:"Uploaded Resources", username: req.session.user.username, files: allFiles})
+      return;
       } 
   });
+  //for viewing and editing self posted resources
+  router.get('/resource', async function(req, res, next){
+    if(!req.session.user){
+      res.redirect('/users/login')
+      return;
+    }else{
+      //console.log(req.session.user._id);
+      const parsedId=parseObjectId(req.session.user._id);
+      const allFiles= await files.find({creator: parsedId})
+      if (allFiles.length===0) {
+        req.flash("error", "Please upload at least one file.");
+        res.redirect("/dashboard");
+        return;
+       }
+      console.log(allFiles)
+      res.render('myResourceList',{layout:"dashboardLayout", pageHeader:"My Uploaded Resources", username: req.session.user.username, files: allFiles
+       })
+      return;
+      } 
+  });
+
+  router.route('/delete/:id')
+    .get(async (req,res)=>{
+        if(!req.session.user){
+            res.redirect('/users/login')
+            return;
+          }
+          else{
+        console.log("deleting")
+        const parsedId=parseObjectId(req.params.id);
+        let deletionInfo = await files.deleteOne({_id: parsedId})
+        if (deletionInfo.deletedCount === 0) {
+            req.flash("error", "Could not delete link with id of "+ '${id}');
+            res.redirect("/tutors/resource");
+        }
+        res.redirect("/tutors/resource");
+      }
+    });
+
+    router.route('/update/:id')
+    .post(async (req,res)=>{
+        if(!req.session.user){
+            res.redirect('/users/login')
+            return;
+          }else{
+        const parsedId=parseObjectId(req.params.id);
+        const updateFile=req.body;
+        let deletionInfo = await files.updateOne({'_id': parsedId}, {$set: updateFile})
+        if (deletionInfo.updatedCount === 0) {
+            req.flash("error", "Could not update link with id of "+ '${id}');
+            res.redirect("/tutors/resource");
+        }
+        res.redirect("/tutors/resource");
+        return;
+      }
+    }) //missing authentication
+    .get(async (req,res)=>{
+        if(!req.session.user){
+            res.redirect('/users/login')
+            return;
+          }
+          else{
+        const parsedId=parseObjectId(req.params.id);
+        const aFile= await files.findOne({_id: parsedId})
+        if (aFile===null) throw "Could not add animal.";
+        console.log(aFile)
+        res.render('partials/resource_update',{layout:"dashboardLayout", pageHeader:"Edit Resource", username: req.session.user.username, 
+        id: parsedId, title: aFile.title, description: aFile.description, link:aFile.link})
+        return;
+          }
+    });
+
+
 
   //route for viewing tutor events
 router.get("/event/:id", async (req, res)=>{
     if (req.session.user) {
-     req.session.tutor=req.params.id;
+    //  req.session.tutor=req.params.id;
      let eventList=await parseEvent(req.params.id);
-     console.log(eventList)
+     //console.log(eventList)
      if(eventList){
      res.render('partials/calendar_demo', {layout:"dashboardLayout", pageHeader:"Calendar", 
      username: req.session.user.username, events: JSON.stringify(eventList), returnBtn: true});
@@ -111,7 +186,7 @@ router.get("/event/:id", async (req, res)=>{
     } else { 
       console.log("no event");
       res.render('partials/calendar_demo',{layout:"dashboardLayout", pageHeader:"Calendar", 
-      username: req.session.user.username, events:false, returnBtn: true});
+      username: req.session.user.username, events:false});
       return;
       }
     }else {
@@ -130,11 +205,11 @@ router.get("/request/:id", (req, res)=>{
        return;
      }
   });
+  
 
   //for uploading study material links to show on a page
   router.post("/upload", async (req, res)=>{
     if (req.session.user) {
-      const tutorId=req.session.user._id;
       const result = Joi.validate(req.body, uploadSchema)
       if (result.error || !isValidURL(req.body.link)) {
         req.flash('error', 'Data entered is not valid. Or the URL is invalid.');
@@ -149,7 +224,7 @@ router.get("/request/:id", (req, res)=>{
         res.redirect("/dashboard");
         return;
       }
-      //res.render("requestForm", {layout:"dashboardLayout", pageHeader:"Request Form", username: req.session.user.username});
+     
      } else {
        res.redirect('/users/login');
        return;

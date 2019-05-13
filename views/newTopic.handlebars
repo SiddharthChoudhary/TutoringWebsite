@@ -1,6 +1,8 @@
 <script src="/newTopic.js"></script>
 
 <div class="container new-topic nav-header">
+	<div class="error-message hidden"><p>Please fill in all the empty box!</p>
+	</div>
 	<h4>New Topic</h4>
 	<div class="form-group col-md-6">
 		<label class="form-label" for="title">Title</label>
@@ -24,21 +26,4 @@
 	<div class="form-group  col-md-4">
   <button class="btn btn-primary" type="submit" id="submit">Create</button>
 	</div>
-	{{!-- <div id="errorModal" class="modal">
-		<div class="modal-overlay"></div>
-		<div class="modal-container">
-			<div class="modal-header">
-				<button class="close-modal btn btn-clear float-right"></button>
-				<div class="modal-title">Empty Fields</div>
-			</div>
-			<div class="modal-body">
-				<div class="content">
-					Please fill out all of the input fields.
-				</div>
-			</div>
-			<div class="modal-footer">
-				<button class="close-modal btn btn-link">Close</button>
-			</div>
-		</div> --}}
-	{{!-- </div> --}}
 </div>
