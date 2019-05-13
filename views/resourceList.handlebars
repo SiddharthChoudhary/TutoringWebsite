@@ -1,0 +1,18 @@
+<div class="col-lg-8 mb-4">
+{{!-- Author--Jack Zhou and Sid--}}
+    <!-- Tutor Uploaded Resources Page -->
+    <div class="card shadow mb-5 nav-header">
+    <div class="card-body">   
+<ul>
+{{#each files}}
+<li>
+
+ <div class="form-row">
+<a href={{this.link}} target="_blank"> {{this.title}}</a>
+ <p>({{this.description}})</p> 
+ </div>
+ 
+</li>
+{{/each}}
+</ul>
+</div></div></div>

@@ -66,12 +66,15 @@ app.use((req, res, next) => {
   next()
 })
 
+
 app.use((req, res, next) => {
   if (req.cookies.user_sid && !req.session.user) {
       res.clearCookie('user_sid');        
   }
   next();
 });
+
+
 
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/tutoringwebsite', (err, db) => {
     if (err) {

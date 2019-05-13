@@ -11,7 +11,7 @@ router.route('/')
         if(user){
             let userId = user._id
             let requestsArray = await Requests.find({'tutor':userId})
-            console.log(requestsArray)
+            //console.log(requestsArray)
             res.send({data:requestsArray})
         }else{
             res.send({data:[]})
