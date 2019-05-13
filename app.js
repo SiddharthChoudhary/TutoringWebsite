@@ -89,6 +89,9 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/tutoringw
     app.use('/calendar',require('./routes/events'));
     app.use('/checkInbox',require('./routes/ajaxInbox'));
     app.use('/tutors',require('./routes/tutors'));
+    app.use('/about',(req,res,next)=>{
+      res.render('aboutUs')
+    })
     app.use(express.static(path.join(__dirname, "./public")));
     // app.use('/vendor', express.static(path.join(__dirname+'./vendor')));
     app.use("/topics", require("./routes/topics")(db));
