@@ -36,15 +36,15 @@ async function validateEvent(id, request){
 router.route('/acceptRequest')
     .put(async (req,res)=>{
         let requestId = req.body.requestId
+        let request = await Requests.findById({'_id': requestId})
+        if(!await validateEvent(req.session.user._id, request)){
+           await Requests.updateOne({'_id':requestId},{'state':2})
+           return;
+        } else {
+
         let updated = await Requests.updateOne({'_id':requestId},{'state':1})
         if(updated){
             res.send({data:1})
-        let request = await Requests.findById({'_id':requestId})
-        if(!await validateEvent(req.session.user._id, request)){
-           req.flash('error',"You have already scheduled an event on that day!")
-           return;
-        }else{
-
         let event = {
             month: request.month,
             day: request.day,
@@ -64,10 +64,10 @@ router.route('/acceptRequest')
             if(err) return console.error(err)
         })
         }
-       }
         else{
             res.send({data:0})
         }
+      }
     })
 router.route('/rejectRequest')
     .put(async (req,res)=>{
@@ -79,4 +79,5 @@ router.route('/rejectRequest')
             res.send({data:0})
         }
     })
+
   module.exports = router

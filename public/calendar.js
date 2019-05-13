@@ -215,7 +215,7 @@ function createCalendar(calendar, element, adjuster){
             let data=calendar.Model[n].Info;
 
           title.innerHTML += '<div id='+"eve_title"+'>' + data.title + "</div>" +
-                             '<div>' + "Tutor: "+ data.tutor + "</div>" +
+                             '<div>' + data.role+": "+ data.participant + "</div>" +
                              '<div>' + "Location:  "+ data.location + "</div>" +
                              '<div>' + "Time: "+data.time + "</div>" ;
           }else {title.innerHTML += '<a>'+'</a>'}

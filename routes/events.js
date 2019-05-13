@@ -30,7 +30,7 @@ async function parseEvent(id){
      console.log(tutor)
      const tutorName=tutor[0].profile.firstname +" "+tutor[0].profile.lastname;
      const time=events[i].start_time+"-"+events[i].end_time
-     const info={title: events[i].title, tutor: tutorName, location: events[i].location, 
+     const info={title: events[i].title, role:"Tutor", participant: tutorName, location: events[i].location, 
   time: time}
      const event={"Year": events[i].year, "Month": events[i].month, "Day": events[i].day,
     "Info": info}
@@ -111,6 +111,7 @@ router.post('/form/post', (req, res, next) => {
           }
           const request = new requests(newEvent)
           request.save();
+          req.flash("success", "The request was successfully sent.");
           res.redirect('/tutors');
           return;
         }

@@ -1,106 +1,106 @@
-const express = require('express');
-const router = express.Router()
-const Joi = require('joi')
-const passport = require('passport')
-const mongoose = require('mongoose')
-const User = require('../modals/user').model
-const hashPassword = require('../modals/user').hashPassword
-const compareHash  = require('../modals/user').compareHash
+var express = require('express');
+var router = express.Router();
 var session = require('express-session');
-var path = require('path');
+const User = require('../modals/user').model
+const Joi = require('joi')
 
-//validation schema
-var sessionChecker = (req, res, next) => {
-  if (req.session.user) {
-      res.redirect('/');
-      return;
-  } else {
-      next();
-  }    
-};
-
-const userSchema = Joi.object().keys({
-  email: Joi.string().email().required(),
-  username: Joi.string().required(),
-  hashedPassword: Joi.string().regex(/^[a-zA-Z0-9]{6,30}$/).required(),
-  confirmationPassword: Joi.any().valid(Joi.ref('hashedPassword')).required()
+const profileSchema = Joi.object().keys({
+  firstname: Joi.string().required(),
+  lastname: Joi.string().required(),
+  bio: Joi.string().min(1).max(300).required(),
+  gender:Joi.string().valid("Male", "Female").required(),
+  tutor_position: Joi.string(),
+  subject: Joi.string().required()
 })
 
- router.route('/login')
- .get(sessionChecker,(req,res)=>{
-    res.render('partials/login/login',{layout:'loginLayout', pageHeader: "Dashboard"})
-  })
-  .post(async (req,res,next)=>{
-  let email  = req.body.email
-  let password = req.body.password
-  if(email && password){
-    if(!await User.findOne({'email':req.body.email},async (err,result)=>{
-      if(result){
-        if(await compareHash(password,result.hashedPassword)){
-          req.session.user = result;
-          res.redirect('/dashboard')
-          return
-        }else{
-          req.flash('error',"Password is not correct")
-          res.redirect('/users/login')
-          return
-        }
-      }
-
-    })){
-        req.flash('error',"There is no such email available with us")
-        res.redirect('/users/login')
-        return
-    }
+/* GET home page. */
+router.get('/' , function(req, res, next) {
+  if (req.session.user) {
+    res.render('partials/default',{layout:"dashboardLayout", username:req.session.user.username});
+  } else {
+    res.redirect('users/login');
   }
- })
-router.route('/register')
-  .get(sessionChecker,(req, res) => {
-    res.render('partials/login/register',{layout:'loginLayout'})
-  })
-  .post(async (req, res, next) => {
-    try {
-      const result = Joi.validate(req.body, userSchema)
-      if (result.error) {
-        req.flash('error', 'Data entered is not valid. Please try again. Password should not contain @#$ etc, and should be of length greater than 6 and less than 30')
-        res.redirect('/users/register')
-        return
+  
+});
+
+router.get('/dashboard', async function(req,res,next){
+  if(!req.session.user){
+    res.redirect('users/login')
+  }else{
+    //console.log(req.session.user);
+    let user =  await User.find({'username':req.session.user.username})
+    let ifTutor = false
+    if(user){
+      if(user[0].profile.tutor_position=='Taken'){
+        ifTutor = true
       }
-      let user = await User.findOne({ 'email': result.value.email })
-      if (user) {
-        req.flash('error', 'Email is already in use.')
-        res.redirect('/users/register')
-        return
-      }
-      user = await User.findOne({ 'username': result.value.username })
-      if (user) {
-        req.flash('error', 'Username is already in use.')
-        res.redirect('/users/register')
-        return
-      }
- 
-      const hash = await hashPassword(result.value.hashedPassword)
- 
-      delete result.value.confirmationPassword
-      result.value.hashedPassword = hash
- 
-      const newUser = await new User(result.value)
-      await newUser.save()
-      req.session.user = result.value;
-      req.flash('success', 'Registration successfully, go ahead and login.')
-      res.redirect('/users/login')
- 
-    } catch(error) {
-      next(error)
     }
+    res.render('partials/default',{layout:"dashboardLayout", pageHeader:"Dashboard", username: req.session.user.username,'ifTutor':ifTutor})
+    }
+    
+});
+
+
+/* GET profile */
+router.get("/profile_page",(req, res)=>{
+  if (req.session.user) {
+    if(req.session.user.profile){
+      let profile=req.session.user.profile;
+      
+      res.render('partials/profile_page',{ layout:"dashboardLayout", pageHeader:"Profile", username: req.session.user.username, profile: profile});
+    }else{
+      res.render('partials/profile_update',{layout:"dashboardLayout", pageHeader:"Profile", username: req.session.user.username});
+    }
+}else res.redirect('users/login');
+})
+
+router.route('/profile_form')
+ .get((req, res)=>{
+  if (req.session.user) {
+    
+      if(req.session.user.profile){
+      let user=req.session.user.profile;
+      let firstname=user.firstname;
+      let lastname=user.lastname;
+      let bio=user.bio;
+      res.render('partials/profile_update',{layout:"dashboardLayout", pageHeader:"Profile", username: req.session.user.username,
+             firstname: firstname, lastname:lastname, bio: bio});
+      }
+      else res.render('partials/profile_update',{layout:"dashboardLayout", pageHeader:"Profile", username: req.session.user.username});
+  
+    }else res.redirect('users/login');
+  
+ })
+  .post(async (req,res,next)=>{
+    
+    console.log(req.body)
+    const result = Joi.validate(req.body, profileSchema)
+    if (result.error) {
+      req.flash('error', 'Please enter the fields required.')
+      res.redirect('/profile_form')
+      return
+    }else {
+     if(result.value.tutor_position){
+      result.value.tutor_position="Taken";
+      if (result.value.subject==="Choose..."){
+      req.flash('error', 'Please pick your subject of teaching.')
+      res.redirect('/profile_form')
+       }
+     }else {
+       result.value.tutor_position="None";
+       result.value.subject="None";
+      }
+    }
+    console.log(result.value );
+    const updateInfo=await User.updateOne({_id: req.session.user._id},{ $set:{profile: result.value}});
+    if (updateInfo.updatedCount === 0) {
+      req.flash("error", "Could not update link with id of "+ '${id}');
+      res.redirect("/profile_form");
+  }
+
+    req.session.user.profile=result.value;
+    req.flash("success", "The file is successfully updated!")
+    res.redirect("/profile_page");
   })
- router.route('/logout')
-      .get((req,res)=>{
-        if(req.session.user){
-          res.clearCookie('user_sid')
-          res.redirect('/users/login')
-        }else{
-          res.redirect('/users/login')
-        }
-      })
-  module.exports = router
+
+module.exports = router;

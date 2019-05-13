@@ -3,7 +3,9 @@
     <!-- Tutor Uploaded Resources Page -->
     <div class="card shadow mb-5 nav-header">
     <div class="card-body">   
+        {{#if files}}   
 <ul>
+
 {{#each files}}
 <li>
 
@@ -15,4 +17,11 @@
 </li>
 {{/each}}
 </ul>
+{{else}}
+<div class="text-center">
+  <h4>Sorry</h4>
+     <h4>This tutor has no uploaded resource.</h4> 
+</div>
+
+{{/if}}
 </div></div></div>

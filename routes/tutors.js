@@ -20,7 +20,7 @@ function parseObjectId(id){
 
 async function getById(id){
     const parsedId=parseObjectId(id);
-    const result=await events.find({"attendees._id":parsedId});
+    const result=await events.find({"attendees._id": parsedId});
     return result;
   }
 
@@ -33,21 +33,27 @@ function isValidURL(value){
     } 
     }
 
+async function getByTutor(id){
+        const parsedId=parseObjectId(id);
+        const result=await events.find({tutor: parsedId});
+        return result;
+      }
 
-async function parseEvent(id){
-    const events=await getById(id)
+//for student
+async function parseEvent(events){
+    
     console.log("event length "+events.length)
     // if(events.length===0) return false;
     //console.log(events)
     if (events.length!== 0) {
     let eventList=[];
     for (let i=0; i<events.length;i++){
-       const parsedId=parseObjectId(events[i].tutor)
-       const tutor=await users.find({_id: parsedId});
-       console.log(tutor)
-       const tutorName=tutor[0].profile.firstname +" "+tutor[0].profile.lastname;
+       const parsedId=parseObjectId(events[i].student)
+       const student=await users.find({_id: parsedId});
+    //    console.log(tutor)
+       const name=student[0].profile.firstname +" "+student[0].profile.lastname;
        const time=events[i].start_time+"-"+events[i].end_time
-       const info={title: events[i].title, tutor: tutorName, location: events[i].location, 
+       const info={title: events[i].title, role:"Student", participant: name, location: events[i].location, 
     time: time}
        const event={"Year": events[i].year, "Month": events[i].month, "Day": events[i].day,
       "Info": info}
@@ -71,12 +77,20 @@ async function parseEvent(id){
     if (req.session.user) {
       const ppl= await users.find({"profile.tutor_position": "Taken"})
       //query.exec(function (err, docs) {});
+      
+
       if(ppl.length){
+        for(let i=0;i< ppl.length; i++){
+            if(String(ppl[i]._id) === String(req.session.user._id)){
+                ppl.splice(i,1)
+                console.log("removed self")
+            }
+        }
         let tutors=ppl;
         res.render('partials/tutors',{layout:"dashboardLayout", pageHeader:"Tutors", username: req.session.user.username, tutors:tutors});
         return;
       }else{
-        req.flash("error","No tutors available")
+        req.flash("error","No tutors are available now. Check back later. ")
         res.redirect('/dashboard')
         return;
       }
@@ -109,7 +123,7 @@ router.get('/resource/:id', async function(req, res, next){
       const parsedId=parseObjectId(req.session.user._id);
       const allFiles= await files.find({creator: parsedId})
       if (allFiles.length===0) {
-        req.flash("error", "Please upload at least one file.");
+        req.flash("error", "Please upload at least one resource.");
         res.redirect("/dashboard");
         return;
        }
@@ -134,6 +148,7 @@ router.get('/resource/:id', async function(req, res, next){
             req.flash("error", "Could not delete link with id of "+ '${id}');
             res.redirect("/tutors/resource");
         }
+        req.flash("success", "The link has been successfully removed!");
         res.redirect("/tutors/resource");
       }
     });
@@ -151,6 +166,7 @@ router.get('/resource/:id', async function(req, res, next){
             req.flash("error", "Could not update link with id of "+ '${id}');
             res.redirect("/tutors/resource");
         }
+        req.flash("success", "The link has been successfully updated!")
         res.redirect("/tutors/resource");
         return;
       }
@@ -177,7 +193,8 @@ router.get('/resource/:id', async function(req, res, next){
 router.get("/event/:id", async (req, res)=>{
     if (req.session.user) {
     //  req.session.tutor=req.params.id;
-     let eventList=await parseEvent(req.params.id);
+     const events=await getByTutor(req.params.id);
+     let eventList=await parseEvent(events);
      //console.log(eventList)
      if(eventList){
      res.render('partials/calendar_demo', {layout:"dashboardLayout", pageHeader:"Calendar", 
@@ -220,7 +237,7 @@ router.get("/request/:id", (req, res)=>{
         console.log(result.value.creator)
         const newFile = await new files(result.value)
         await newFile.save()
-        req.flash('error', 'File is successfully uploaded!');
+        req.flash('success', 'The resource has been successfully uploaded!');
         res.redirect("/dashboard");
         return;
       }

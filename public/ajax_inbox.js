@@ -38,38 +38,39 @@ function rejectRequest(element){
     }
   })
 }
+
 function myPeriodicMethod() {
     $.ajax({
       url: "/checkInbox", 
       success: function(data) {
         let requestArray = data.data
         let count = 0
-        $('.messageCenter').html('')
+        $('.inbox-container').html('')
         if(requestArray){
            for(let i=0;i<requestArray.length;i++){
             //if the state is 0 that means it's not read yet
-            if(Number(requestArray[i].state)==0){
+            if(Number(requestArray[i].state)=== 0){
               count++;
             let requestId = requestArray[i]._id
-            $('.messageCenter').append(
+            $('.inbox-container').append(
               '<a id="'+requestId+'"class="dropdown-item d-flex align-items-center" href="#">'
                 +'<div class="dropdown-list-image mr-3">'
                   +'<img class="rounded-circle" src="https://source.unsplash.com/fn_BT9fwg_E/60x60" alt="">'
                   +'<div class="status-indicator bg-success"></div>'
                 +'</div>'
                 +'<div class="font-weight-bold">'
-                  +'<div class="text-truncate"> '+requestArray[i].description+' </div>'
+                  +'<div class="text-truncate"> '+ requestArray[i].description+' </div>'
                   +'<div class="small text-gray-500">'+(requestArray[i].month+1)+'/'+requestArray[i].day+'/'+requestArray[i].year+'-'+requestArray[i].start_time+' to '+requestArray[i].end_time+'</div>'
                 +'</div>'
                 +'<div class="align-items-right">'
                   +'<button id="'+requestId+'" class="btn btn-success" onclick="acceptRequest(this)" style="border-radius:30px;margin-bottom:10px">Accept</button>'
-                  +'<button id="'+requestId+'"class="btn btn-danger" onclick="rejectRequest(this)" style="border-radius:30px;margin-bottom:10px">Reject</button>'
+                  +'<button id="'+requestId+'" class="btn btn-danger" onclick="rejectRequest(this)" style="border-radius:30px;margin-bottom:10px">Reject</button>'
                 +'</div>'
 
               +'</a>')
             }
           }
-          $('.messageCenter').append(
+          $('.inbox-container').append(
             '<a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>'
           )
         }
@@ -86,7 +87,7 @@ function myPeriodicMethod() {
     });
   }
 //   // schedule the first invocation:
-setTimeout(myPeriodicMethod, 1000);
+setTimeout(myPeriodicMethod, 6000);
 
 // (function($) {
     // Let's start writing AJAX calls!

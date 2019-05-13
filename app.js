@@ -7,14 +7,11 @@ const expressHandlebars = require('express-handlebars');
 const hbs = require("handlebars");
 const moment = require("moment");
 const expressHbs = require("express-handlebars");
-const mongodb = require("mongodb");
 const flash = require('connect-flash');
 const session = require('express-session');
 const mongoose = require('mongoose')
 const helmet=require("helmet")
-const passport = require('passport')
 mongoose.Promise = global.Promise
-mongoose.connect('mongodb://localhost:27017/tutoringwebsite')
 const app = express()
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
@@ -61,7 +58,7 @@ hbs.registerHelper("formatDate", (date) => {
 app.use(flash())
 app.use(helmet())
 app.use((req, res, next) => {
-  res.locals.success_mesages = req.flash('success')
+  res.locals.success_messages = req.flash('success')
   res.locals.error_messages = req.flash('error')
   next()
 })
@@ -76,16 +73,16 @@ app.use((req, res, next) => {
 
 
 
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/tutoringwebsite', (err, db) => {
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/tutoringwebsite', {useNewUrlParser: true },(err, db) => {
     if (err) {
         console.log(err);
         process.exit(1);
     }
     console.log("Connected to database");
-    app.use("/forum", require("./routes/index")(db));
+    app.use("/forum", require("./routes/forum")(db));
     require("./socket/index")(io, db);
-    app.use('/', require('./routes/login'))
-    app.use('/users',require('./routes/users'))
+    app.use('/', require('./routes/users'))
+    app.use('/users',require('./routes/logins'))
     app.use('/calendar',require('./routes/events'));
     app.use('/checkInbox',require('./routes/ajaxInbox'));
     app.use('/tutors',require('./routes/tutors'));
