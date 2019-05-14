@@ -4,7 +4,7 @@ const User = require('../modals/user').model
 const Requests = require('../modals/request').model
 const Events   = require('../modals/event').model
 
-router.route('/')
+router.route('/request')
 .get(async (req,res)=>{
     if(req.session.user){
         let user = await User.findOne({'username':req.session.user.username})
@@ -17,7 +17,23 @@ router.route('/')
             res.send({data:[]})
         }
     }else{
-        res.redirect('/')
+        return;
+    }
+    })
+
+router.route('/response')
+.get(async (req,res)=>{
+    if(req.session.user){
+    
+        let requestsArray = await Requests.find({'student': req.session.user._id})
+        if(requestsArray){
+            console.log(requestsArray)
+            res.send({data:requestsArray})
+        }else{
+            res.send({data:[]})
+        }
+    }else{
+        return;
     }
     })
 
@@ -35,6 +51,7 @@ async function validateEvent(id, request){
 
 router.route('/acceptRequest')
     .put(async (req,res)=>{
+        
         let requestId = req.body.requestId
         let request = await Requests.findById({'_id': requestId})
         if(!await validateEvent(req.session.user._id, request)){
@@ -73,6 +90,17 @@ router.route('/rejectRequest')
     .put(async (req,res)=>{
         let requestId = req.body.requestId
         let updated = await Requests.updateOne({'_id':requestId},{'state':2})
+        if(updated){
+            res.send({data:1})
+        }else{
+            res.send({data:0})
+        }
+    })
+
+    router.route('/okResponse')
+    .delete(async (req,res)=>{
+        let requestId = req.body.requestId
+        let updated = await Requests.deleteOne({'_id':requestId})
         if(updated){
             res.send({data:1})
         }else{

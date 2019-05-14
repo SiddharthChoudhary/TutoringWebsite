@@ -14,6 +14,10 @@ const profileSchema = Joi.object().keys({
   subject: Joi.string().required()
 })
 
+const searchSchema=Joi.object().keys({
+  search: Joi.string().required()
+})
+
 function parseObjectId(id){ 
   id=String(id);  
   try { 
@@ -30,7 +34,7 @@ for (let i=0;i< requests.length;i++){
     let title=requests[i].title
     let date=(requests[i].month+1) +"/" + requests[i].day +"/"+requests[i].year
     let time=requests[i].start_time +"-" +requests[i].end_time
-    let description=requests[1].description
+    let description=requests[i].description
     let location=requests[i].location
     let state;
     if(requests[i].state===0){
@@ -64,7 +68,11 @@ for (let i=0;i< requests.length;i++){
 /* GET home page. */
 router.get('/' , function(req, res, next) {
   if (req.session.user){
-    res.render('partials/default',{layout:"dashboardLayout", pageHeader:"Dashboard",username:req.session.user.username});
+    let ifTutor=false
+    if(req.session.user.profile.tutor_position==='Taken'){
+        ifTutor = true
+      }
+    res.render('partials/default',{layout:"dashboardLayout", pageHeader:"Dashboard",username:req.session.user.username, ifTutor:ifTutor});
   } else {
     res.redirect('users/login');
   }
@@ -96,18 +104,13 @@ router.get('/dashboard', async function(req,res,next){
   if(!req.session.user){
     res.redirect('users/login')
   }else{
-    //console.log(req.session.user);
-    let user =  await User.find({'username':req.session.user.username})
-    let ifTutor = false
-    if(user){
-      if(user[0].profile.tutor_position=='Taken'){
+    let ifTutor=false
+    if(req.session.user.profile.tutor_position==='Taken'){
         ifTutor = true
       }
+    res.render('partials/default',{layout:"dashboardLayout", pageHeader:"Dashboard", username: req.session.user.username,ifTutor:ifTutor})
     }
-    res.render('partials/default',{layout:"dashboardLayout", pageHeader:"Dashboard", username: req.session.user.username,'ifTutor':ifTutor})
-    }
-    
-});
+  });
 
 
 /* GET profile */
@@ -160,7 +163,7 @@ router.route('/profile_form')
        result.value.subject="None";
       }
     }
-    console.log(result.value );
+    //console.log(result.value );
     const updateInfo=await User.updateOne({_id: req.session.user._id},{ $set:{profile: result.value}});
     if (updateInfo.updatedCount === 0) {
       req.flash("error", "Could not update link with id of "+ '${id}');
@@ -173,73 +176,76 @@ router.route('/profile_form')
   })
 
 
-  //Zejie Yao section as below
-  async function findProfileById(id){
-    let profile = await User.findOne({_id:id});
-    return profile;
-}
 
-async function findProfileByName (name){
-    if(typeof name !== 'string') throw 'Please input right type of name.'
-    name = name.toLowerCase()
+  //Zejie Yao section as below Edited and debugged by Jack
+  
+  async function findProfileByName (name){
+    let n = name.toLowerCase()
     let matchedProfile = []
     let data = await User.find({});
-   
-    for(let i in data){
-        let name1 = data[i].profile["firstname"] + ' ' +data[i].profile["lastname"];
-        name1 = name1.toLowerCase();
-        if(name1.includes(name)){
+    
+    for(let i=0;i< data.length;i++){
+        if(data[i].profile.firstname){
+        console.log(data[i].profile)
+        let firstname = data[i].profile.firstname.toLowerCase()
+        let lastname= data[i].profile.lastname.toLowerCase()
+        let username= data[i].username
+        console.log(firstname)
+        if( firstname.includes(n) || lastname.includes(n)
+         || username.includes(n) ){
             matchedProfile.push(data[i]);
         }
     }
-    // console.log(matchedProfile)
+  }
     return matchedProfile
 }
 
 router.route('/search')
     .post( async (req,res)=>{
-        console.log("in search route")
-        let name = req.body.search
-        // console.log(User.profile.firstname)
-        let matchedProfile = await findProfileByName(name)
-        if(!matchedProfile){
-            res.render('partials/profilefound',{
-                profileName:name,
-                error:'not found',
-                title:'Profile found'
-            })
-            return
+        //console.log("in search route")
+        if(req.session.user){
+        let result=Joi.validate(req.body, searchSchema)
+        if (result.error) {
+          req.flash('error', 'Data entered is not valid')
+          res.redirect('/dashboard')
+          return
         }
-        // console.log(matchedProfile)
-
+        // console.log(User.profile.firstname)
+        console.log(req.body.search)
+        let matchedProfile = await findProfileByName(req.body.search)
+        
+        if(!matchedProfile.length){
+            req.flash("error", "There is no user found.")
+            res.redirect("/dashboard")
+            return
+        }else{
         res.render('partials/profilefound',{
-            profileName:name,
-
-            found:matchedProfile
-
-                .map((x)=>{
-                x.profile
-                // console.log(x.profile.firstname + ' ' + x.profile.lastname)
-                return {
-                    id:x._id,
-                    name:x.profile.firstname + ' ' + x.profile.lastname
-
-                }
-            }),
-            title:'Profile found'
+            profileName: req.body.search,
+            found: matchedProfile,
+            pageHeader:'Profile found', username: req.session.user.username
         })
+        }}else {
+          res.redirect("/users/login")
+          return;}
     })
 
 router.route('/details/:id')
     .get(async (req, res) => {
+      if(req.session.user){
         try {
-            let profileId = req.params.id
-            let profile = await findProfileById(profileId)
-            console.log(profile)
+            let parsedId = parseObjectId(req.params.id)
+            let profile = await User.findOne({_id: parsedId});
+            if(profile===null){
+              req.flash("error", "There is not any user with id "+"${parsedId}")
+              res.redirect("/dashboard")
+            }
             res.render('partials/profiledetail', {layout:"dashboardLayout", pageHeader:"Profile", username: req.session.user.username, profile: profile.profile})
         } catch (e) {
             res.sendStatus(500);
         }
+      } else {
+        res.redirect("/users/login")
+        return;}
     })
 
 

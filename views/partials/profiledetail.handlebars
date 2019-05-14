@@ -1,20 +1,23 @@
-<article>
-    {{!-- Zejie Yao --}}
+
+<div class="col-lg-8 mb-10">
+
+    <div class="col-md-20 form-col">
+      <p id="firstname">First Name: {{profile.firstname}}</p>
     
-        {{#if profile}}
-        <dl>
-            <dt id="firstName">First Name:</dt>
-            <dd>{{profile.firstname}}</dd>
-            <dt id="lastName">Last Name:</dt>
-            <dd>{{profile.lastname}}</dd>
-            <dt id="gender">Gender:</dt>
-            <dd>{{profile.gender}}</dd>
-            <dt id="subject">Subject:</dt>
-            <dd>{{profile.subject}}</dd>
-            <dt id="bio">Bio:</dt>
-            <dd>{{profile.bio}}</dd>
+      <p id="lastname">Last Name: {{profile.lastname}}</p>
   
-        </dl>
-        {{/if}}
+      <p id="bio">Bio: {{profile.bio}}</p>
     
-</article>
+      <p id="gender">Gender: {{profile.gender}}</p>
+    
+      <p id="tutor_pos">Tutor_position: {{profile.tutor_position}}</p>
+    
+      <p id="subject">Subject: {{profile.subject}}</p>
+<div class="form-row">
+      <em onclick="window.history.go(-1); return false;" class="fas fa-angle-left fa-fw"></em>
+                <h6 onclick="window.history.go(-1); return false;" >Go Back</h6>
+  </div>
+
+    </div> 
+
+</div>

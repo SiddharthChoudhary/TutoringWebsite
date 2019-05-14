@@ -1,26 +1,25 @@
-<article>
-    <div>
-        <h1>
-            Profile Found
-        </h1>
-        <br/>
-        <h2>
-            matched Name: {{profileName}}
-        </h2>
-    </div>
-    <br/>
-    <main>
-        <div>
-            <ul>
-                {{#each found}}
-                    <li>
-                            <a href="/details/{{id}}">{{name}}</a>
-                    </li>
-                {{/each}}
 
-            </ul>
-            <p>{{error}}</p>
+
+<div class="col-lg-8 mb-5">
+{{!-- Author--Jack Zhou and Sid--}}
+    <!-- Tutor Infomation Page -->
+    <div class="card shadow mb-4 nav-header">
+    <div class="col">
+        <h4>Searched: {{profileName}}</h4>
+       </div> 
+    
+    <div class="card-body">   
+<ul>
+{{#each found}}
+<li>
+<div class="form-col">
+    <div class="col">
+<a href="/details/{{this._id}}">{{this.profile.firstname}}   {{this.profile.lastname}}</a>
+</div>
+</div> 
+</li>
+{{/each}}
+
+</ul>
         </div>
-    </main>
-
-</article>
+</div></div>
