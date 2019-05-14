@@ -1,10 +1,16 @@
 # TutoringWebsite
 It's a student and the tutor website where you can communicate with your tutors while being a student.
+
 Things you can do in here:
+
 1.) You can accept and reject the permission
+
 2.) It's a website to increase the communication between tutors and their students.
+
 3.) You can see the tutors schedule and your schedule as well
+
 4.) Your tutor if he or she wants can accept or reject your meeting time and you will get notified by that, It's all dynamic so you don't have to worry about anything
+
 5.) You can upload your resources in case if you are a tutor and want to upload few links for the students
 
 Code is done in:
