@@ -84,20 +84,76 @@ seeder.connect('mongodb://localhost/tutoringwebsite', async function() {
             attendees: [{_id:user1._id}, {_id:user3._id}]
           }
         ]
+      },
+      {
+        'model': 'request',
+        'documents': [
+          {
+            day: 25,
+            month: 4,
+            year: 2019,
+            start_time: "4:20pm",
+            end_time: "4:30pm",
+            title: "It's 420",
+            description: "seed2 requests 10 minutes of 420 with seed1, should involve tutor:seed1, student: seed2",
+            location: "Flavor town",
+            tutor: user1._id,
+            student: user2._id,
+            state: 0
+          }
+        ]
+      },
+      {
+        'model': 'request',
+        'documents': [
+          {
+            day: 26,
+            month: 4,
+            year: 2019,
+            start_time: "4:20pm",
+            end_time: "4:30pm",
+            title: "It's 420",
+            description: "seed2 requests another 10 minutes of 420 with seed1, should involve tutor:seed1, student: seed2",
+            location: "Flavor town",
+            tutor: user1._id,
+            student: user2._id,
+            state: 0
+          }
+        ]
+      },
+      {
+        'model': 'request',
+        'documents': [
+          {
+            day: 5,
+            month: 5,
+            year: 2019,
+            start_time: "4:20pm",
+            end_time: "4:30pm",
+            title: "It's 420",
+            description: "seed3 requests 10 minutes of 420 with seed1, should involve tutor:seed1, student: seed2",
+            location: "Flavor town",
+            tutor: user1._id,
+            student: user3._id,
+            state: 0
+          }
+        ]
       }
   ];    
+
       
   // Load Mongoose models
   seeder.loadModels([
-    'modals/event.js'
+    'modals/event.js',
+    'modals/request.js'
   ]);
  
   // Clear specified collections
   // **** this clears the current userdb, so seeding multiple times gives you the same db.
-  seeder.clearModels(['event'], function() {
+  seeder.clearModels(['event', 'request'], function() {
     
-    console.log("data is: ")
-    console.log(data);
+    // console.log("data is: ")
+    // console.log(data);
     // Callback to populate DB once collections have been cleared
     seeder.populateModels(data, function() {
       seeder.disconnect();
