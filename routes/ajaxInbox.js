@@ -43,7 +43,7 @@ async function validateEvent(id, request){
   console.log("false")
   // validate event to avoid having more than one event on one day
   for(let i=0;i<event.length; i++){
-     if(event[i].month===request.month &&event[i].day===request.day &&
+     if(event[i].month===request.month && event[i].day===request.day &&
         event[i].year===request.year ){ console.log(false);
              return false}
   } return true;

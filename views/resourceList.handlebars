@@ -1,8 +1,16 @@
 <div class="col-lg-8 mb-4">
 {{!-- Author--Jack Zhou--}}
     <!-- Tutor Uploaded Resources Page -->
-    <div class="card shadow mb-5 nav-header">
-    <div class="card-body">   
+    <div class="card shadow">
+     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+      <div class="form-row">
+
+                <em  onclick="window.history.go(-1); return false;" class=" left fas fa-angle-left fa-fw"></em>
+                <a  class="goback" onclick="window.history.go(-1); return false;" >Go Back</a>
+              
+        </div>
+     </div>
+    <div >   
         {{#if files}}   
 <ul>
 
@@ -10,8 +18,8 @@
 <li>
 
  <div class="form-row">
-<a href={{this.link}} target="_blank"> {{this.title}}</a>
- <p>({{this.description}})</p> 
+<a href={{this.link}} target="_blank"> Title: {{this.title}}</a>
+ <p>Description: ({{this.description}})</p> 
  </div>
  
 </li>
@@ -19,8 +27,8 @@
 </ul>
 {{else}}
 <div class="text-center">
-  <h4>Sorry</h4>
-     <h4>This tutor has no uploaded resource.</h4> 
+  <h2>Sorry</h2>
+     <h3>This tutor has no uploaded resource.</h3> 
 </div>
 
 {{/if}}

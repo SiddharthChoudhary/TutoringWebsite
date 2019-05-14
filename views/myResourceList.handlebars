@@ -2,7 +2,7 @@
 <div class="col-lg-8 mb-4">
 {{!-- Author--Jack Zhou and Sid--}}
     <!-- Tutor Infomation Page -->
-    <div class="card shadow mb-5 nav-header">
+    <div class="card shadow mb-5">
     <div class="card-body">   
 <ol >
 {{#each files}}
@@ -10,7 +10,7 @@
 
 <div class="form-col">
     <div class="col">
- <a href={{this.link}} target="_blank"> {{this.title}}</a><p>Description: ({{this.description}})</p>
+ <a href={{this.link}} target="_blank"> Title: {{this.title}}</a><p>Description: ({{this.description}})</p>
 </div>
 <div class="form-row">
   <a href="/tutors/delete/{{this._id}}" data-method="post" class="mean-btn btn">Delete</a>
