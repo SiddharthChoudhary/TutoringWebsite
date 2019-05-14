@@ -30,8 +30,6 @@ var data = [
             email: "seed1@gmail.com",
             username: "seed1",
             hashedPassword: "$2a$10$/8p/dzNqYbUkGhBdGhNMve8A4KSPbYt1CMbL4kqXTT3EG1aj0kKSq", // it's "asd123"
-            createdAt: '2019-05-10 19:04:56.260',
-            updatedAt: '2019-05-10 19:04:56.260',
             profile: {
               firstname: "Seed",
               lastname: "One",
@@ -50,8 +48,6 @@ var data = [
           email: "seed2@gmail.com",
           username: "seed2",
           hashedPassword: "$2a$10$/8p/dzNqYbUkGhBdGhNMve8A4KSPbYt1CMbL4kqXTT3EG1aj0kKSq", // It's "asd123"
-          createdAt: '2019-05-10 19:04:56.260',
-          updatedAt: '2019-05-10 19:04:56.260',
           profile: {
             firstname: "Seed",
             lastname: "Two",
@@ -69,9 +65,7 @@ var data = [
         {
           email: "seed3@gmail.com", // this one does not have a profile. But can be added after logging in
           username: "seed3",
-          hashedPassword: "$2a$10$/8p/dzNqYbUkGhBdGhNMve8A4KSPbYt1CMbL4kqXTT3EG1aj0kKSq", // It's "asd123"
-          createdAt: '2019-05-10 19:04:56.260',
-          updatedAt: '2019-05-10 19:04:56.260'
+          hashedPassword: "$2a$10$/8p/dzNqYbUkGhBdGhNMve8A4KSPbYt1CMbL4kqXTT3EG1aj0kKSq" // It's "asd123"
         }
       ]
     }
