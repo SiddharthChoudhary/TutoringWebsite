@@ -130,7 +130,7 @@ function myPeriodicMethod() {
                   +'<div class="text-truncate"> '+ requestArray[i].description+' </div>'
                   +'<div class="small text-gray-500">'+ (requestArray[i].month+1)+'/'+requestArray[i].day+'/'+requestArray[i].year+"\n"+requestArray[i].start_time+' to '+requestArray[i].end_time+'</div>'
                 +'</div>'
-                +'<div class="align-items-right">'
+                +'<div class="align-items-right form-col">'
                   +'<button id="'+requestId+'" class="btn btn-success" onclick="okResponse(this)" style="border-radius:30px;margin-bottom:10px">Ok</button>'
                 +'</div>'
 
