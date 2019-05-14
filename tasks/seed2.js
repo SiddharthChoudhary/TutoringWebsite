@@ -1,5 +1,6 @@
 var seeder = require('mongoose-seed');
 const UserDB = require('../modals/user').model;
+const shortid = require("shortid");
 var data;
 
  
@@ -117,7 +118,7 @@ seeder.connect('mongodb://localhost/tutoringwebsite', async function() {
             location: "Flavor town",
             tutor: user1._id,
             student: user2._id,
-            state: 0
+            state: 2
           }
         ]
       },
@@ -131,26 +132,61 @@ seeder.connect('mongodb://localhost/tutoringwebsite', async function() {
             start_time: "4:20pm",
             end_time: "4:30pm",
             title: "It's 420",
-            description: "seed3 requests 10 minutes of 420 with seed1, should involve tutor:seed1, student: seed2",
+            description: "seed3 requests 10 minutes of 420 with seed1, should involve tutor:seed1, student: seed3",
             location: "Flavor town",
             tutor: user1._id,
             student: user3._id,
             state: 0
           }
         ]
+      },
+      {
+        'model': 'resource',
+        'documents': [
+          {
+            title: "Seed1Upload1",
+            description: "yes",
+            link: "https://www.youtube.com/watch?v=TUjSn5NMZ-o",
+            creator: user1._id
+          }
+        ]
+      },
+      {
+        'model': 'resource',
+        'documents': [
+          {
+            title: "Seed1Upload2",
+            description: "true",
+            link: "https://www.youtube.com/watch?v=ydmPh4MXT3g",
+            creator: user1._id
+          }
+        ]
+      },
+      {
+        'model': 'resource',
+        'documents': [
+          {
+            title: "Seed1Upload3",
+            description: "actualStudyMaterial",
+            link: "https://www.w3schools.com/howto/howto_make_a_website.asp",
+            creator: user1._id
+          }
+        ]
       }
+      
   ];    
 
       
   // Load Mongoose models
   seeder.loadModels([
     'modals/event.js',
-    'modals/request.js'
+    'modals/request.js',
+    'modals/resource.js'
   ]);
  
   // Clear specified collections
   // **** this clears the current userdb, so seeding multiple times gives you the same db.
-  seeder.clearModels(['event', 'request'], function() {
+  seeder.clearModels(['event', 'request', 'resource'], function() {
     
     // console.log("data is: ")
     // console.log(data);

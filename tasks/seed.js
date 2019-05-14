@@ -33,7 +33,7 @@ var data = [
             profile: {
               firstname: "Seed",
               lastname: "One",
-              bio: "I am Seed One. I am a student as well as a tutor. I tutor maths.",
+              bio: "I am Seed One. I am a student as well as a tutor. I tutor maths. I have a number of posts, and requests",
               gender: "Male",
               tutor_position: "Taken",
               subject: "Maths"
@@ -68,5 +68,23 @@ var data = [
           hashedPassword: "$2a$10$/8p/dzNqYbUkGhBdGhNMve8A4KSPbYt1CMbL4kqXTT3EG1aj0kKSq" // It's "asd123"
         }
       ]
-    }
+    },
+    {
+      'model': 'User',
+      'documents': [
+        {
+          email: "seed4@gmail.com",
+          username: "seed4",
+          hashedPassword: "$2a$10$/8p/dzNqYbUkGhBdGhNMve8A4KSPbYt1CMbL4kqXTT3EG1aj0kKSq", // it's "asd123"
+          profile: {
+            firstname: "Seed",
+            lastname: "Four",
+            bio: "I am Seed Four. I am a student as well as a tutor. I tutor maths. I am a dummy tutor account",
+            gender: "Male",
+            tutor_position: "Taken",
+            subject: "Maths"
+          }
+        }
+      ]
+  }
 ];
