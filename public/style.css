@@ -107,3 +107,52 @@ position: right;
 
   color:white;
 }
+
+/* overwrite all bootstap colors */
+
+.side-bar-text{
+  color: white  !important;
+}
+
+.header-text{
+  color: rgb(83, 83, 94) !important;
+  font-size: 13px !important;
+}
+
+.btn-primary, .primary{
+
+  background-color:#4970de !important;
+  color:white;
+
+}
+
+.btn-secondary{
+  background-color:#737587 !important;
+}
+
+.btn-secondary:hover{
+  background-color:#8e8f97 !important;
+}
+
+.btn-primary:hover{
+
+  background-color:#4f76e4 !important;
+  color:white;
+
+}
+
+.mean-btn{
+  color:white !important;
+  background-color: #454545 !important;
+  margin: 2px !important;
+}
+
+.goback{
+ font-size: 14.5px;
+
+}
+
+.footer{
+
+  margin-top: 20px;
+}

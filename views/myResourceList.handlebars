@@ -4,24 +4,24 @@
     <!-- Tutor Infomation Page -->
     <div class="card shadow mb-5 nav-header">
     <div class="card-body">   
-<ul class="navbar-nav">
+<ol >
 {{#each files}}
 <li>
 
 <div class="form-col">
     <div class="col">
- <a href={{this.link}} target="_blank"> {{this.title}}</a>({{this.description}})
+ <a href={{this.link}} target="_blank"> {{this.title}}</a><p>Description: ({{this.description}})</p>
 </div>
 <div class="form-row">
-  <a href="/tutors/delete/{{this._id}}" data-method="post" class="btn">Delete</a>
-  <a href="/tutors/update/{{this._id}}" class="btn"> Edit</a>
+  <a href="/tutors/delete/{{this._id}}" data-method="post" class="mean-btn btn">Delete</a>
+  <a href="/tutors/update/{{this._id}}" class="mean-btn btn"> Edit</a>
 </div> 
 </div> 
 
 </li>
 {{/each}}
 
-</ul>
+</ol>
         </div>
     </div>
 </div>

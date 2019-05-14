@@ -13,17 +13,21 @@
               </div>
               <form class="user" action="/users/register" method="POST">
                 <div class="form-group">
-                    <input type="text" class="form-control form-control-user" id="name" name="username" placeholder="User Name">
+                   <label for="username" class="text-dark">User Name</label>
+                    <input type="text" class="form-control form-control-user" id="username" name="username" placeholder="User Name">
                   </div>
                 <div class="form-group">
-                  <input type="email" class="form-control form-control-user" id="email" name="email" placeholder="Email Address">
+                   <label for="emailaddress" class="text-dark">Email Address</label>
+                  <input type="email" class="form-control form-control-user" id="emailaddress" name="email" placeholder="Email Address">
                 </div>
                 <div class="form-group row">
                   <div class="col-sm-6 mb-3 mb-sm-0">
-                    <input type="password" class="form-control form-control-user" id="password" name="hashedPassword" placeholder="Password">
+                     <label for="onepassword" class="text-dark">Password</label>
+                    <input type="password" class="form-control form-control-user" id="onepassword" name="hashedPassword" placeholder="Password">
                   </div>
                   <div class="col-sm-6">
-                    <input type="password" class="form-control form-control-user" id="exampleRepeatPassword" name="confirmationPassword" placeholder="Repeat Password">
+                     <label for="repeatPassword" class="text-dark">Confirm Password</label>
+                    <input type="password" class="form-control form-control-user" id="repeatPassword" name="confirmationPassword" placeholder="Repeat Password">
                   </div>
                 </div>
                 <button  type="submit" class="btn btn-primary btn-user btn-block">
@@ -31,7 +35,7 @@
                 </button>
               </form>
               <div class="text-center">
-                <a class="small" href="#">Forgot Password?</a>
+                <a class="small">Forgot Password?</a>
               </div>
               <div class="text-center">
                 <a class="small" href="/users/login">Already have an account? Login!</a>

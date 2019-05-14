@@ -35,16 +35,16 @@
   <div id="wrapper">
 
     <!-- Sidebar -->
-    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+    <ul class="navbar-nav bg-gradient-primary primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
       <!-- Sidebar - Brand -->
       <li class="nav-item active">
-      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
+      <div class="sidebar-brand d-flex align-items-center justify-content-center side-bar-text">
         <div class="sidebar-brand-icon rotate-n-15">
           <em class="fas fa-laugh-wink"></em>
         </div>
         <div class="sidebar-brand-text mx-3">Stud-Tutor</div>
-      </a>
+      </div>
       <!-- Divider -->
       <hr class="sidebar-divider my-0">
      </li>
@@ -62,13 +62,13 @@
       
 
       <!-- Heading -->
-      <li class="sidebar-heading">
+      <li class="sidebar-heading side-bar-text">
         Interface
       </li>
 
       <!-- Nav Item - Calendar -->
       <li class="nav-item">
-        <a class="nav-link" href="/calendar">
+        <a class="nav-link side-bar-text" href="/calendar">
         <em class="far fa-fw fa-calendar-alt"></em>
           <span>Calendar</span>
         </a>
@@ -76,7 +76,7 @@
 
       <!-- Nav Item - Tutors -->
       <li class="nav-item">
-        <a class="nav-link" href="/tutors">
+        <a class="nav-link side-bar-text" href="/tutors">
           <em class="fas fa-fw fa-chalkboard-teacher"></em>
           <span>Tutors</span>
         </a>
@@ -84,14 +84,14 @@
 
       <!-- Nav Item - Forum -->
       <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+        <a class="nav-link collapsed side-bar-text" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
           <em class="fas fa-fw fa-comments"></em>
           <span>Forum</span>
         </a>
 
         <div id="collapseTwo" class="collapse">
-          <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">Forum topics:</h6>
+          <div class="bg-white py-2 collapse-inner rounded ">
+            <h6 class="collapse-header header-text">Forum topics:</h6>
             <a class="collapse-item" href="/forum">Home</a>
               <a class="collapse-item" href="/categories/study">Study</a>
               <a class="collapse-item" href="/categories/social">Social</a>
@@ -104,13 +104,13 @@
       </li>
 
       <!-- Heading -->
-      <li class="sidebar-heading">
+      <li class="sidebar-heading side-bar-text">
         Learn More
       </li>
 
       <!-- Nav Item - Tables -->
       <li class="nav-item">
-        <a class="nav-link" href="/about">
+        <a class="nav-link side-bar-text" href="/about">
           <em class="fas fa-fw fa-table"></em>
           <span>About Us</span></a>
           <!-- Divider -->
@@ -120,7 +120,7 @@
       
       <li class="text-center d-none d-md-inline">
       <!-- Sidebar Toggler (Sidebar) -->
-      
+        <label hidden for="sidebarToggle">Sidebar Toggle</label>
         <button class="rounded-circle border-0" id="sidebarToggle"></button>
       
       </li>
@@ -145,9 +145,11 @@
           <!-- Topbar Search -->
           <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" method="post" action="/search">
             <div class="input-group">
-              <input type="text" name="search" class="form-control bg-light border-0 small" placeholder="Search for the person" aria-label="Search">
+              
+              <input type="text" id="searchbtn" name="search" class="form-control bg-light border-0 small" placeholder="Search for the person" aria-label="Search">
               <div class="input-group-append">
-                <button class="btn btn-primary" type="submit">
+                <label hidden for="searchbtn">Search Button</label>
+                <button class="btn btn-primary" id="searchbtn" type="submit">
                   <em class="fas fa-search fa-sm"></em>
                 </button>
               </div>
@@ -166,9 +168,10 @@
               <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in" aria-labelledby="searchDropdown">
                 <form class="form-inline mr-auto w-100 navbar-search">
                   <div class="input-group">
+                    
                     <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search">
                     <div class="input-group-append">
-                      <button class="btn btn-primary" type="button">
+                      <button class="btn" type="button">
                         <em class="fas fa-search fa-sm"></em>
                       </button>
                     </div>
@@ -180,11 +183,11 @@
            <!--Nav Item- -Notification-->
             <li class="nav-item dropdown no-arrow mx-1">
               <div class="inbox">
-              <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <div class="nav-link dropdown-toggle" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <em class="fas fa-bell fa-fw"></em>
                 <!-- Counter - Alerts -->
                 <span id="notifi" class="badge badge-danger badge-counter"></span>
-              </a>
+              </div>
 
               <!-- Dropdown - Alerts -->
               <div class="dropdown-list dropdown-menu notifi-center dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
@@ -201,11 +204,11 @@
             <!-- Nav Item - Messages -->
             <li class="nav-item dropdown no-arrow mx-1 inbox">
               <div class="inbox">
-              <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <div class="nav-link dropdown-toggle" id="messagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <em class="fas fa-envelope fa-fw"></em>
                 <!-- Counter - Messages -->
                 <span id="inbox" class="badge badge-danger badge-counter"></span>
-              </a>
+              </div>
               <!-- Dropdown - Messages -->
               <div class="dropdown-list dropdown-menu messageCenter dropdown-menu-right shadow animated--grow-in" aria-labelledby="messagesDropdown" style="width:auto !important">
                 <h6 class="dropdown-header">Message Center</h6>
@@ -288,13 +291,13 @@
       <!-- End of Main Content -->
 
       <!-- Footer -->
-      {{!-- <footer class="sticky-footer bg-white footer" id="footer">
+      <footer class="sticky-footer bg-white footer">
         <div class="container my-auto">
           <div class="copyright text-center my-auto">
-            <span>Copyright &copy; Your Website 2019</span>
+            <span>Copyright &copy; Tutoring Website 2019</span>
           </div>
         </div>
-      </footer> --}}
+      </footer>
       <!-- End of Footer -->
 
     </div>

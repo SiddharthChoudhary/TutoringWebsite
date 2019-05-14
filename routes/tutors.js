@@ -19,13 +19,32 @@ function parseObjectId(id){
 };
 
 
-function isValidURL(value){
+async function isValidURL(value){
     {
         var expression = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi
         var regexp = new RegExp(expression);
-        return regexp.test(value);
+        if(regexp.test(value)){
+          let match=await files.findOne({link: value})
+          if (match===null){
+            return true;
+          }
+          else{
+            return false
+          }
+        }
     } 
-    }
+  }
+
+  async function isValidURLUponUpdate(link, id){
+     if(!await isValidURL(link)){
+      let match=await files.find({link: link})
+      for(let i=0;i< match.length; i++){
+        if(String(match[i]._id)!== String(id)){
+          return false;
+        }
+      }return true;
+     }
+  }
 
 async function getByTutor(id){
         const parsedId=parseObjectId(id);
@@ -155,8 +174,14 @@ router.get('/resource/:id', async function(req, res, next){
           }else{
         const parsedId=parseObjectId(req.params.id);
         const updateFile=req.body;
-        let deletionInfo = await files.updateOne({'_id': parsedId}, {$set: updateFile})
-        if (deletionInfo.updatedCount === 0) {
+        const result = Joi.validate(req.body, uploadSchema)
+        if (result.error || !await isValidURLUponUpdate(req.body.link, parsedId)) {
+          req.flash('error', 'Data entered is not valid. Or the URL is invalid.');
+          res.redirect("/tutors/resource");
+          return;
+        }
+        let updateInfo = await files.updateOne({'_id': parsedId}, {$set: updateFile})
+        if (updateInfo.updatedCount === 0) {
             req.flash("error", "Could not update link with id of "+ '${parsedId}');
             res.redirect("/tutors/resource");
         }
@@ -222,13 +247,14 @@ router.get("/request/:id", (req, res)=>{
   router.post("/upload", async (req, res)=>{
     if (req.session.user) {
       const result = Joi.validate(req.body, uploadSchema)
-      if (result.error || !isValidURL(req.body.link)) {
+      if (result.error || !await isValidURL(req.body.link)) {
         req.flash('error', 'Data entered is not valid. Or the URL is invalid.');
         res.redirect("/dashboard");
         return;
       }else {
         result.value.creator=req.session.user._id;
-        console.log(result.value.creator)
+        //console.log(result.value.creator)
+
         const newFile = await new files(result.value)
         await newFile.save()
         req.flash('success', 'The resource has been successfully uploaded!');
