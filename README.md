@@ -13,6 +13,8 @@ Things you can do in here:
 
 5.) You can upload your resources in case if you are a tutor and want to upload few links for the students
 
+Professor Tip : You can go to the About us page to see who we are and how much did each individual contributed
+
 Code is done in:
   - Node js, Express, MongoDb
  
