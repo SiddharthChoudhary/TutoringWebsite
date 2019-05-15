@@ -103,7 +103,7 @@ function myPeriodicMethod() {
       },
       complete: function() {
         // schedule the next request *only* when the current one is complete:
-        setTimeout(myPeriodicMethod, 5*60000);
+        setTimeout(myPeriodicMethod, 3000);
       }
     });
 
@@ -117,7 +117,7 @@ function myPeriodicMethod() {
         if(requestArray){
            for(let i=0;i<requestArray.length;i++){
             //if the state is 0 that means it's not read yet
-            if(Number(requestArray[i].state)=== 1 || Number(requestArray[i].state)=== 0){
+            if(Number(requestArray[i].state)=== 1 || Number(requestArray[i].state)=== 2){
               count++;
             let requestId = requestArray[i]._id
             $('.notifi-container').append(
@@ -146,7 +146,7 @@ function myPeriodicMethod() {
       },
       complete: function() {
         // schedule the next request *only* when the current one is complete:
-        setTimeout(myPeriodicMethod, 20*60000);
+        setTimeout(myPeriodicMethod, 6000);
       }
     });
   
