@@ -3,7 +3,8 @@ const UserDB = require('../modals/user').model;
 const shortid = require("shortid");
 var data;
 
- 
+
+
 // Connect to MongoDB via Mongoose
 seeder.connect('mongodb://localhost/tutoringwebsite', async function() {
   // const data = await s2h.sdhelper();
@@ -12,6 +13,11 @@ seeder.connect('mongodb://localhost/tutoringwebsite', async function() {
   // console.log(user1._id);
   const user2 = await UserDB.findOne({'email':'seed2@gmail.com'});
   const user3 = await UserDB.findOne({'email':'seed3@gmail.com'});
+  const t1id = shortid.generate();
+  const t1c1id = shortid.generate();
+  const t1c2id = shortid.generate();
+  const t2id = shortid.generate();
+  const t3id = shortid.generate();
     // Data array containing seed data - documents organized by Model
     data = [
       {
@@ -172,6 +178,72 @@ seeder.connect('mongodb://localhost/tutoringwebsite', async function() {
             creator: user1._id
           }
         ]
+      },
+      {
+        'model': 'topic',
+        'documents': [
+          {
+            id: t1id,
+            creator: "seed2",
+            title: "Looking for a buddy",
+            description: "FOR 420",
+            postDate: Date.now(),
+            category: "health",
+            comments: [t1c1id, t1c2id]
+          }
+        ]
+      },
+      {
+        'model': 'comment',
+        'documents': [
+          {
+            id: t1c1id,
+            creator: "seed1",
+            content: "YA YEET",
+            postDate: Date.now(),
+            topicId: t1id
+          }
+        ]
+      },
+      {
+        'model': 'comment',
+        'documents': [
+          {
+            id: t1c2id,
+            creator: "seed4",
+            content: "YA YEEEET",
+            postDate: Date.now(),
+            topicId: t1id
+          }
+        ]
+      },
+      {
+        'model': 'topic',
+        'documents': [
+          {
+            id: t2id,
+            creator: "seed3",
+            title: "I'm sad",
+            description: "Somebody talk to me, please?",
+            postDate: Date.now(),
+            category: "social",
+            comments: []
+          }
+        ]
+      },
+      {
+        'model': 'topic',
+        'documents': [
+          {
+            id: t3id,
+            creator: "seed3",
+            title: "Hi",
+            description: "Anybody want to be my friend?",
+            postDate: Date.now(),
+            category: "social",
+            comments: []
+          }
+        ]
       }
       
   ];    
@@ -181,12 +253,14 @@ seeder.connect('mongodb://localhost/tutoringwebsite', async function() {
   seeder.loadModels([
     'modals/event.js',
     'modals/request.js',
-    'modals/resource.js'
+    'modals/resource.js',
+    'modals/topic.js',
+    'modals/comment.js'
   ]);
  
   // Clear specified collections
   // **** this clears the current userdb, so seeding multiple times gives you the same db.
-  seeder.clearModels(['event', 'request', 'resource'], function() {
+  seeder.clearModels(['event', 'request', 'resource', 'topic', 'comment'], function() {
     
     // console.log("data is: ")
     // console.log(data);
