@@ -46,39 +46,46 @@ async function isValidURL(value){
      }
   }
 
-async function getByTutor(id){
-        const parsedId=parseObjectId(id);
-        const result=await events.find({tutor: parsedId});
-        return result;
-      }
+  async function getById(id){
+    const parsedId=parseObjectId(id);
+    const result=await events.find({"attendees._id":parsedId});
+    return result;
+  }
 
 //for student
-async function parseEvent(events){
+async function parseEvent(events, id){
     
-    console.log("event length "+events.length)
-    // if(events.length===0) return false;
-    //console.log(events)
     if (events.length!== 0) {
-    let eventList=[];
-    for (let i=0; i<events.length;i++){
-       const parsedId=parseObjectId(events[i].student)
-       const student=await users.find({_id: parsedId});
-    //    console.log(tutor)
-       const name=student[0].profile.firstname +" "+student[0].profile.lastname;
-       const time=events[i].start_time+"-"+events[i].end_time
-       const info={title: events[i].title, role:"Student", participant: name, location: events[i].location, 
-    time: time}
-       const event={"Year": events[i].year, "Month": events[i].month, "Day": events[i].day,
-      "Info": info}
-       eventList.push(event);
-    }
-     return eventList;
-   } else {
-     console.log("false")
-     return false;
+      let eventList=[];
+      for (let i=0; i<events.length;i++){
+         //console.log(tutor)
+         let role;
+         let name;
+         if(String(id) === String(events[i].student)){
+          const parsedId=parseObjectId(events[i].tutor)
+          const tutor=await users.find({_id: parsedId});
+          name= tutor[0].profile.firstname +" "+tutor[0].profile.lastname;
+          role="Tutor"
+         }else {
+          const parsedId=parseObjectId(events[i].student)
+          const student=await users.find({_id: parsedId});
+          role="Student"
+          name=student[0].profile.firstname +" "+student[0].profile.lastname;
+        }
+         const time=events[i].start_time+"-"+events[i].end_time
+         const info={title: events[i].title, role: role, participant: name, location: events[i].location, 
+      time: time}
+         const event={"Year": events[i].year, "Month": events[i].month, "Day": events[i].day,
+        "Info": info}
+         eventList.push(event);
+      }
+       return eventList;
+     } else {
+       console.log("false")
+       return false;
+      };
     };
-  };
-
+    
 
   const uploadSchema = Joi.object().keys({
     title: Joi.string().required(),
@@ -212,12 +219,12 @@ router.get('/resource/:id', async function(req, res, next){
 router.get("/event/:id", async (req, res)=>{
     if (req.session.user) {
     //  req.session.tutor=req.params.id;
-     const events=await getByTutor(req.params.id);
-     let eventList=await parseEvent(events);
+     const events=await getById(req.params.id);
+     let eventList=await parseEvent(events, req.params.id);
      //console.log(eventList)
-     if(eventList){
+     if(eventList.length){
      res.render('partials/calendar_demo', {layout:"dashboardLayout", pageHeader:"Calendar", 
-     username: req.session.user.username, events: JSON.stringify(eventList), returnBtn: true});
+     username: req.session.user.username, events: JSON.stringify(eventList)});
      return;
     } else { 
       console.log("no event");
