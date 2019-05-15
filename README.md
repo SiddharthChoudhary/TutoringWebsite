@@ -26,4 +26,9 @@ Code is done in:
  3.) And then $ npm start to run 
  
  4.) And that's it, start enjoying the platform at http://localhost:3000/
+
+ To populate the database:
+ 1.) Run $ node ./tasks/seed.js
+
+ 2.) Run $ node ./tasks/seed2.js
  
