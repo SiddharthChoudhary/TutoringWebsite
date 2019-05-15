@@ -13,6 +13,7 @@ seeder.connect('mongodb://localhost/tutoringwebsite', async function() {
   // console.log(user1._id);
   const user2 = await UserDB.findOne({'email':'seed2@gmail.com'});
   const user3 = await UserDB.findOne({'email':'seed3@gmail.com'});
+  const user4 = await UserDB.findOne({'email':'seed4@gmail.com'});
   const t1id = shortid.generate();
   const t1c1id = shortid.generate();
   const t1c2id = shortid.generate();
@@ -84,11 +85,11 @@ seeder.connect('mongodb://localhost/tutoringwebsite', async function() {
             start_time: "4:20pm",
             end_time: "4:30pm",
             title: "It's 420, but...",
-            description: "Just a regular meeting, should involve tutor:seed1, student: seed3",
+            description: "Just a regular meeting, should involve tutor:seed1, student: seed4",
             location: "Flavor town",
             tutor: user1._id,
-            student: user3._id,
-            attendees: [{_id:user1._id}, {_id:user3._id}]
+            student: user4._id,
+            attendees: [{_id:user1._id}, {_id:user4._id}]
           }
         ]
       },

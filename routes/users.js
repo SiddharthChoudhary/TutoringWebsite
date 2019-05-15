@@ -75,11 +75,12 @@ for (let i=0;i< requests.length;i++){
 router.get('/' , function(req, res, next) {
   if (req.session.user){
     let ifTutor=false
-    if(req.session.user.profile.tutor_position==='Taken'){
-        ifTutor = true
-      }
+    if(!req.session.user.profile || req.session.user.tutor_position !=="Taken"){
+        res.render('partials/default',{layout:"dashboardLayout", pageHeader:"Dashboard", 
+        username:req.session.user.username, ifTutor:ifTutor});
+      }else{ifTutor=true;
     res.render('partials/default',{layout:"dashboardLayout", pageHeader:"Dashboard", 
-    username:req.session.user.username, ifTutor:ifTutor});
+    username:req.session.user.username, ifTutor:ifTutor});}
   } else {
     res.redirect('users/login');
   }
@@ -113,12 +114,14 @@ router.get('/dashboard', async function(req,res,next){
     res.redirect('users/login')
   }else{
     let ifTutor=false
-    if(req.session.user.profile.tutor_position==='Taken'){
-        ifTutor = true
-      }
-    res.render('partials/default',{layout:"dashboardLayout", pageHeader:"Dashboard", 
-    username: req.session.user.username,ifTutor:ifTutor})
-    }
+    if(!req.session.user.profile || req.session.user.profile.tutor_position !=='Taken'){
+       res.render('partials/default',{layout:"dashboardLayout", pageHeader:"Dashboard", 
+       username: req.session.user.username,ifTutor:ifTutor})
+    } else {
+      ifTutor=true
+      res.render('partials/default',{layout:"dashboardLayout", pageHeader:"Dashboard", 
+      username: req.session.user.username, ifTutor:ifTutor})
+    }}
   });
 
 

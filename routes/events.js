@@ -104,6 +104,11 @@ router.post('/form/post', (req, res, next) => {
         res.redirect('/tutors/request/'+req.session.tutor)
         return;
          }
+         else if(!req.session.user.profile){
+          req.flash('error', 'Please fill out your profile first.')
+          res.redirect("/profile_page")
+          return;
+         }
         else {
           let date=String(result.value.date).split(" ")
           let newEvent={
