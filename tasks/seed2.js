@@ -24,13 +24,13 @@ seeder.connect('mongodb://localhost/tutoringwebsite', async function() {
         'model': 'event',
         'documents': [
           {
-            day: 20,
+            day: 19,
             month: 3,
             year: 2019,
             start_time: "4:20pm",
             end_time: "4:30pm",
             title: "It's 420",
-            description: "10 minutes of 420, should involve tutor:seed1, student: seed2",
+            description: "10 minutes of PRE 420, should involve tutor:seed1, student: seed2",
             location: "Flavor town",
             tutor: user1._id,
             student: user2._id,

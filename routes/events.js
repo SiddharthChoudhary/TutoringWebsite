@@ -25,12 +25,23 @@ async function parseEvent(id){
   if (events.length!== 0) {
   let eventList=[];
   for (let i=0; i<events.length;i++){
-     const parsedId=parseObjectId(events[i].tutor)
-     const tutor=await users.find({_id: parsedId});
-     console.log(tutor)
-     const tutorName=tutor[0].profile.firstname +" "+tutor[0].profile.lastname;
+     
+     //console.log(tutor)
+     let role;
+     let name;
+     if(String(id) === String(events[i].tutor)){
+      const parsedId=parseObjectId(events[i].student)
+      const student=await users.find({_id: parsedId});
+      name= student[0].profile.firstname +" "+student[0].profile.lastname;
+      role="Student"
+     }else {
+      const parsedId=parseObjectId(events[i].tutor)
+      const tutor=await users.find({_id: parsedId});
+      role="Tutor"
+      name=tutor[0].profile.firstname +" "+tutor[0].profile.lastname;
+    }
      const time=events[i].start_time+"-"+events[i].end_time
-     const info={title: events[i].title, role:"Tutor", participant: tutorName, location: events[i].location, 
+     const info={title: events[i].title, role: role, participant: name, location: events[i].location, 
   time: time}
      const event={"Year": events[i].year, "Month": events[i].month, "Day": events[i].day,
     "Info": info}
