@@ -1,6 +1,10 @@
 # TutoringWebsite
 It's a student and the tutor website where you can communicate with your tutors while being a student.
 
+
+Refer the live video of running it in here: https://youtu.be/92wmAVVAKAQ
+
+
 Things you can do in here:
 
 1.) You can accept and reject the permission
@@ -31,4 +35,3 @@ Code is done in:
  1.) Run $ node ./tasks/seed.js
 
  2.) Run $ node ./tasks/seed2.js
- 
