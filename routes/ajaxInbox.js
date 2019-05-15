@@ -27,7 +27,7 @@ router.route('/response')
     
         let requestsArray = await Requests.find({'student': req.session.user._id})
         if(requestsArray){
-            console.log(requestsArray)
+            //console.log(requestsArray)
             res.send({data:requestsArray})
         }else{
             res.send({data:[]})
