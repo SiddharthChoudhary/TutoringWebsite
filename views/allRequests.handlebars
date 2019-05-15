@@ -1,7 +1,7 @@
 <div class="col-lg-8 mb-4">
 {{!-- Author--Jack Zhou--}}
     <!-- Tutor Uploaded Resources Page -->
-    <div class="card shadow mb-5 nav-header">
+    <div class="card shadow mb-5">
     <div class="card-body">   
         {{#if requests}}   
 <ul>
@@ -9,20 +9,19 @@
 {{#each requests}}
 <li>
 
- <div class="form-row">
-<a > {{title}}</a>
- <p>({{description}})</p> 
- <p>({{state}})</p> 
+ <div class="form-col">
+ <p >Title: {{title}}</p>
+ <p>Description: ({{description}})</p> 
+ <p>Student: ({{student}})</p>
+ <p>Date: ({{date}})</p>
+ <p>Time: ({{time}})</p>
+ <p>Location: ({{location}})</p>
+ <p>State: ({{state}})</p>
  </div>
  
 </li>
 {{/each}}
 </ul>
-{{else}}
-<div class="text-center">
-  <h4>Sorry</h4>
-     <h4>This tutor has no uploaded resource.</h4> 
-</div>
 
 {{/if}}
 </div>

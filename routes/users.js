@@ -49,10 +49,16 @@ for (let i=0;i< requests.length;i++){
     if(student===null) {
       return false;
     }
+    let studentReq;
+    if(student.profile.firstname){
+      studentReq= student.profile.firstname+" "+student.profile.lastname;
+    }else {
+      studentReq= "Username-"+student.username;
+    }
 
     let request= {
         title: title,
-        student:student.profile.firstname+" "+student.profile.lastname,
+        student: studentReq,
         date: date,
         time: time,
         description: description,
@@ -69,10 +75,12 @@ for (let i=0;i< requests.length;i++){
 router.get('/' , function(req, res, next) {
   if (req.session.user){
     let ifTutor=false
-    if(req.session.user.profile.tutor_position==='Taken'){
-        ifTutor = true
-      }
-    res.render('partials/default',{layout:"dashboardLayout", pageHeader:"Dashboard",username:req.session.user.username, ifTutor:ifTutor});
+    if(!req.session.user.profile || req.session.user.tutor_position !=="Taken"){
+        res.render('partials/default',{layout:"dashboardLayout", pageHeader:"Dashboard", 
+        username:req.session.user.username, ifTutor:ifTutor});
+      }else{ifTutor=true;
+    res.render('partials/default',{layout:"dashboardLayout", pageHeader:"Dashboard", 
+    username:req.session.user.username, ifTutor:ifTutor});}
   } else {
     res.redirect('users/login');
   }
@@ -85,10 +93,11 @@ router.get('/request' , async function(req, res, next) {
       if(allRequests.length){
       const messages= await parseRequest(allRequests);
       if(!messages){
-        req.flash("error", "The student with " + '${studentID}' + "cannot be found.")
+        req.flash("error", "The student with cannot be found.")
         res.redirect("/")
       }
-      res.render('allRequests',{layout:"dashboardLayout", pageHeader: "My Received Request Messages",username:req.session.user.username, requests: messages});
+      res.render('allRequests',{layout:"dashboardLayout", pageHeader: "My Received Request Messages", 
+      username:req.session.user.username, requests: messages});
       } else{
         req.flash("error", "You do have any request message as a tutor.")
         res.redirect("/")
@@ -105,11 +114,14 @@ router.get('/dashboard', async function(req,res,next){
     res.redirect('users/login')
   }else{
     let ifTutor=false
-    if(req.session.user.profile.tutor_position==='Taken'){
-        ifTutor = true
-      }
-    res.render('partials/default',{layout:"dashboardLayout", pageHeader:"Dashboard", username: req.session.user.username,ifTutor:ifTutor})
-    }
+    if(!req.session.user.profile || req.session.user.profile.tutor_position !=='Taken'){
+       res.render('partials/default',{layout:"dashboardLayout", pageHeader:"Dashboard", 
+       username: req.session.user.username,ifTutor:ifTutor})
+    } else {
+      ifTutor=true
+      res.render('partials/default',{layout:"dashboardLayout", pageHeader:"Dashboard", 
+      username: req.session.user.username, ifTutor:ifTutor})
+    }}
   });
 
 
@@ -239,7 +251,8 @@ router.route('/details/:id')
               req.flash("error", "There is not any user with id "+"${parsedId}")
               res.redirect("/dashboard")
             }
-            res.render('partials/profiledetail', {layout:"dashboardLayout", pageHeader:"Profile", username: req.session.user.username, profile: profile.profile})
+            res.render('partials/profiledetail', {layout:"dashboardLayout", pageHeader:"Profile", 
+            username: req.session.user.username, profile: profile.profile})
         } catch (e) {
             res.sendStatus(500);
         }

@@ -14,6 +14,12 @@ function okResponse(element){
     success:function(data){
       if(data){
         $('.notifi-center').find('#'+$(element).attr('id')).remove()
+        let count= label2.html()-1
+        if(count===0){
+          label2.hide()
+        }else{
+        label2.html(count)
+        }
       }
     },
     error:function(data){
@@ -33,6 +39,12 @@ function acceptRequest(element){
     success:function(data){
       if(data){
         $('.messageCenter').find('#'+$(element).attr('id')).remove()
+        let count= label1.html()-1
+        if(count===0){
+          label1.hide()
+        }else{
+        label1.html(count)
+        }
       }
     },
     error:function(data){
@@ -52,6 +64,12 @@ function rejectRequest(element){
     success:function(data){
       if(data){
         $('.messageCenter').find('#'+$(element).attr('id')).remove()
+        let count= label1.html()-1
+        if(count===0){
+          label1.hide()
+        }else{
+        label1.html(count)
+        }
       }
     },
     error:function(data){
@@ -74,7 +92,7 @@ function myPeriodicMethod() {
               count++;
             let requestId = requestArray[i]._id
             $('.inbox-container').append(
-              '<a id="'+requestId+'"class="dropdown-item d-flex align-items-center" href="#">'
+              '<div id="'+requestId+'"class="dropdown-item d-flex align-items-center">'
                 +'<div class="dropdown-list-image mr-3">'
                   +'<img class="rounded-circle" src="https://source.unsplash.com/fn_BT9fwg_E/60x60" alt="">'
                   +'<div class="status-indicator bg-success"></div>'
@@ -88,7 +106,7 @@ function myPeriodicMethod() {
                   +'<button id="'+requestId+'" class="btn btn-danger" onclick="rejectRequest(this)" style="border-radius:30px;margin-bottom:10px">Reject</button>'
                 +'</div>'
 
-              +'</a>')
+              +'</div>')
             }
           }
           $('.inbox-container').append(
@@ -120,14 +138,20 @@ function myPeriodicMethod() {
             if(Number(requestArray[i].state)=== 1 || Number(requestArray[i].state)=== 2){
               count++;
             let requestId = requestArray[i]._id
+            let state;
+            if(Number(requestArray[i].state)=== 1 ){
+              state="Approved"
+            } else {
+              state="Rejected"
+            }
             $('.notifi-container').append(
-              '<a id="'+requestId+'"class="dropdown-item d-flex align-items-center" href="#">'
+              '<a id="'+requestId+'"class="dropdown-item d-flex align-items-center">'
                 +'<div class="dropdown-list-image mr-3">'
                 +'<img class="rounded-circle" src="https://source.unsplash.com/fn_BT9fwg_E/60x60" alt="">'
                   +'<div class="status-indicator bg-success"></div>'
                 +'</div>'
                 +'<div class="font-weight-bold">'
-                  +'<div class="text-truncate"> '+ requestArray[i].description+' </div>'
+                  +'<div class="text-truncate"> '+"State: "+ state+' </div>'
                   +'<div class="small text-gray-500">'+ (requestArray[i].month+1)+'/'+requestArray[i].day+'/'+requestArray[i].year+"\n"+requestArray[i].start_time+' to '+requestArray[i].end_time+'</div>'
                 +'</div>'
                 +'<div class="align-items-right form-col">'

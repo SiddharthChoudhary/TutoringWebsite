@@ -1,7 +1,7 @@
 /*
   Author: Jack Ducasse;
   Version: 0.1.0;
-  (◠‿◠✿)
+  (This section of code is borrowed from the author mentioned)
 */
 var Calendar = function(model, options, date){
   // Default Values
@@ -241,12 +241,7 @@ function createCalendar(calendar, element, adjuster){
       //Disabled Days
       var d = (i + calendar.Selected.LastDay + 1)%7;
       console.log(d)
-      // for(var q = 0; q < calendar.Options.DisabledDays.length; q++){
-      //   console.log(q)
-      //   if(d==calendar.Options.DisabledDays[q]){
-      //     day.className += " disableDay";
-      //   }
-      // }
+      
 
       var number = DayNumber(i+1);
       day.appendChild(number);
@@ -274,13 +269,3 @@ function calendar(events){
   var obj = new Calendar(events);
   createCalendar(obj, element);
 }
-
-
-// var events = [
-//   {'Date': new Date(2019, 5, 8), 'Title': 'Doctor appointment at 3:25pm.', 'Info': 'See you at 10 am.'},
-//   {'Date': new Date(2019, 5, 7), 'Title': 'New Garfield movie comes out!', 'Info': 'See you'},
-//   {'Date': new Date(2019, 6, 27), 'Title': '25 year anniversary'},
-// ];
-// var settings = {};
-// var element = document.getElementById('calendar');
-// calendar(element, events, settings);

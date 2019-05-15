@@ -1,5 +1,6 @@
 body {
   background-color: cornflowerblue;
+  padding-right: 0 !important;
 }
 
 header {
@@ -155,4 +156,10 @@ position: right;
 .footer{
 
   margin-top: 20px;
+}
+
+
+#notifi{
+  color: white !important;
+  background-color: #e22f0d !important;
 }
