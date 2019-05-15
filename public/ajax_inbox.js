@@ -121,7 +121,7 @@ function myPeriodicMethod() {
       },
       complete: function() {
         // schedule the next request *only* when the current one is complete:
-        setTimeout(myPeriodicMethod, 3000);
+        setTimeout(myPeriodicMethod, 2*60000);
       }
     });
 
@@ -170,7 +170,7 @@ function myPeriodicMethod() {
       },
       complete: function() {
         // schedule the next request *only* when the current one is complete:
-        setTimeout(myPeriodicMethod, 6000);
+        setTimeout(myPeriodicMethod, 2*60000);
       }
     });
   
