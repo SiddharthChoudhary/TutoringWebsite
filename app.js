@@ -19,7 +19,7 @@ app.use(morgan('dev'))
  
 // 2 for views
 app.set('views', path.join(__dirname, 'views'))
-app.engine('handlebars', expressHandlebars({ defaultLayout: 'loginLayout' }))
+app.engine('handlebars', expressHadlebars({ defaultLayout: 'loginLayout' }))
 app.engine('handlebars', expressHandlebars({ defaultLayout: 'dashboardLayout' }))
 app.engine(" handlebars", expressHbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
